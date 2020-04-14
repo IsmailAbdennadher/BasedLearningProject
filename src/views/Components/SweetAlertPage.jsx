@@ -7,12 +7,20 @@ import Card from 'components/Card/Card.jsx';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
+
+import{
+    selectOptions
+} from 'variables/Variables.jsx';
+
 class SweetAlertPage extends Component{
     constructor(props){
         super(props);
         this.state = {
             alert: null,
-            show: false
+            show: false,
+            singleSelect:null
         }
         this.hideAlert = this.hideAlert.bind(this);
         this.successDelete = this.successDelete.bind(this);
@@ -141,7 +149,13 @@ class SweetAlertPage extends Component{
                     input
                     showCancel
                     style={{display: "block",marginTop: "-100px"}}
-                    title="Input something"
+                    title={<Select
+                                                    placeholder="Single Select"
+                                                    name="singleSelect"
+                                                    value={this.state.singleSelect}
+                                                    options={selectOptions}
+                                                    onChange={(value) => this.setState({ singleSelect: value})}
+                                                />}
                     onConfirm={(e) => this.inputConfirmAlert(e)}
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"

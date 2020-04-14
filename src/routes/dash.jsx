@@ -19,6 +19,9 @@ import VectorMap from 'views/Maps/VectorMap.jsx';
 import Charts from 'views/Charts/Charts.jsx';
 import Calendar from 'views/Calendar/Calendar.jsx';
 import UserPage from 'views/Pages/UserPage.jsx';
+import EquipeForms from 'views/Forms/EquipeForms.jsx';
+import SujetForms from 'views/Forms/SujetForms.jsx';
+import ListeSujets from 'views/Components/ListeSujets.jsx';
 
 import pagesRoutes from './pages.jsx';
 
@@ -28,7 +31,6 @@ var dashRoutes = [
     { path: "/dashboard", name: "Dashboard", icon: "pe-7s-graph", component: Dashboard },
     { collapse: true, path: "/components", name: "Components", state: "openComponents", icon: "pe-7s-plugin", views:[
         { path: "/components/buttons", name: "Buttons", mini: "B", component: Buttons },
-        { path: "/components/buttons", name: "Buttons", mini: "B", component: Buttons },
         { path: "/components/grid-system", name: "Grid System", mini: "GS", component: GridSystem },
         { path: "/components/panels", name: "Panels", mini: "P", component: Panels },
         { path: "/components/sweet-alert", name: "Sweet Alert", mini: "SA", component: SweetAlert },
@@ -37,7 +39,10 @@ var dashRoutes = [
         { path: "/components/typography", name: "Typography", mini: "T", component: Typography }]
     },
     { collapse: true, path: "/forms", name: "Forms", state: "openForms", icon: "pe-7s-note2", views:
-        [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
+        [{ path: "/forms/equipes", name: "Equipes", mini: "EE", component: EquipeForms },
+        { path: "/forms/sujets", name: "Sujets", mini: "SS", component: SujetForms },
+        { path: "/forms/Listesujets", name: "Liste Sujets", mini: "LS", component: ListeSujets },
+        { path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
         { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms },
         { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms },
         { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard }]

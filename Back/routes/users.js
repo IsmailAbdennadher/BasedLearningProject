@@ -6,6 +6,11 @@ router.route('/').get((req, res) => {
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/:classe').get((req, res) => {
+  User.find({"classe":req.params.classe})
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 
 router.route('/add').post((req, res) => {
   const nom = req.body.nom;

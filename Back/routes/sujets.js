@@ -1,7 +1,7 @@
 const router = require('express').Router();
 let Sujet = require('../models/sujet.model');
 let Equipe = require('../models/equipe.model');
-const arrayKraz=[];
+const arrayJson=[];
 router.route('/').get((req, res) => {
   Sujet.find().populate('porteur_projet').populate('equipes')
     .then(users => res.json(users))
@@ -33,14 +33,13 @@ function delay() {
   return new Promise(function(resolve, reject) {
     // Only `delay` is able to resolve or reject the promise
     setTimeout(function() {
-      resolve(42); // After 3 seconds, resolve the promise with value 42
+      resolve(42); // After 1 seconds, resolve the promise with value 42
     }, 1000);
   });
 }
 async function getAllSujets(listeEquipes,res) {
   try {
   	console.log('test');
-    // GET a list of book IDs of the current user
     
   var array=[];
   for (var e of listeEquipes) {
@@ -49,9 +48,9 @@ async function getAllSujets(listeEquipes,res) {
     // wait for 3 seconds (just for the sake of this example)
     await delay();
     // GET information about each book
-    //console.log('votre tableau est '+arrayKraz);
-    res.json(arrayKraz);
-    return arrayKraz;
+    //console.log('votre tableau est '+arrayJson);
+    res.json(arrayJson);
+    return arrayJson;
   } catch(error) {
     // If any of the awaited promises was rejected, this catch block
     // would catch the rejection reason
@@ -64,8 +63,8 @@ async function getEquipe(e){
 		//return c;
 }
  async function foo(equipes){
- 	//console.log('kraaaaaaaaaaaz'+arrayKraz);
-  		await arrayKraz.push(equipes);
+ 	//console.log('Json'+arrayJson);
+  		await arrayJson.push(equipes);
   	}
   	function findEquipeIndice(myArray,id){
 
@@ -170,7 +169,7 @@ router.route('/affecter/aleatoire').post(async function(req, res){
   }
   	//console.log('element de l index ='+arraySujets[s]);
   	//console.log('count='+arraySujets[s].length);
-  arrayKraz.length=0;
+  arrayJson.length=0;
   //var arraySujets=foo(listeEquipes);
   
   

@@ -13,9 +13,12 @@ router.route('/add').post((req, res) => {
   const nomEquipe = req.body.nomEquipe;
   const choixSujet = req.body.choixSujet;
   var membres = [];
-  User.findById(req.body.idMembre)
+  User.find({'_id': { $in : 
+    req.body.idMembre
+  }
+  })
   .then(membre => {console.log('your id='+membre._id);
-  	membres.push(membre._id);
+  	membres=membre;
   	const newEquipe = new Equipe({nomEquipe,membres,choixSujet});
 
   newEquipe.save()
