@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
 import {
     Grid, Row, Col,
     Form, FormGroup, FormControl, ControlLabel
@@ -8,15 +8,19 @@ import Card from 'components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 
+
+import { NavLink,withRouter } from 'react-router-dom';
+
 import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-class SujetForms extends Component{
+class SujetEdit extends Component{
     constructor(props){
         super(props);
         this.vForm = this.refs.vForm;
+        this.hideAlert = this.hideAlert.bind(this);
         this.state = {
             // Register
             titre: "",
@@ -24,7 +28,7 @@ class SujetForms extends Component{
             type: null, //select box
             accepte: false,
             titreError: null,
-            nbrEquipeParProjet:1,
+            nbrEquipeParProjet:null,
             nbrEquipeParProjetError:null,
             descriptionError: null,
             alert: null,
@@ -32,7 +36,6 @@ class SujetForms extends Component{
             selectOptions:[{value:'web-plateforme',label:'web-plateforme'},{value:'app mobile',label:'app mobile'},{value:'pi-Bi',label:'pi-Bi'}
             ],
         }
-        this.state.type=this.state.selectOptions[0];
     }
     successAlert(){
         this.setState({
@@ -40,12 +43,13 @@ class SujetForms extends Component{
                 <SweetAlert
                     success
                     style={{display: "block",marginTop: "-100px"}}
-                    title="Sujet ajouté!"
+                    title="Sujet mis à jour!"
                     onConfirm={() => this.props.history.push("/forms/Listesujets")}
                     onCancel={() => this.hideAlert()}
-                    confirmBtnBsStyle="info"
+                   
                 >
-                    Votre sujet a été ajouté avec succès!
+                    Votre sujet a été mis à jour!
+
                 </SweetAlert>
             )
         });
@@ -55,17 +59,34 @@ class SujetForms extends Component{
             alert: null
         });
     }
+    componentDidMount(){
+        console.log('id='+this.props.match.params.id);
+        fetch("http://localhost:5000/sujets/"+this.props.match.params.id)
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                return response.json();
+              }).then(sujet => {
+                  this.setState({titre: sujet.titre,description: sujet.description,type:{value:sujet.type,label:sujet.type},accepte:sujet.accepte,nbrEquipeParProjet:sujet.nbrEquipeParProjet});
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
+
+    }
     handleTypeValidation(e){
         var digitRex = /^\d+$/;
         digitRex.test(this.state.nbrEquipeParProjet) === false ? this.setState({ nbrEquipeParProjetError: (<small className="text-danger">Nombre d'equipe par sujet doit etre un nombre.</small>) }):this.setState({ nbrEquipeParProjetError: null });
         var descriptionRex = /[-a-zA-Z:%&?!=//\s]{10,}$/;
         descriptionRex.test(this.state.description) === false ? this.setState({ descriptionError: (<small className="text-danger">La description est obligatoire et doit etre de longueur 10 min.</small>) }):this.setState({ descriptionError: null });
-        var titreRex = /[-a-zA-Zéçà]+$/;
+        var titreRex = /[-a-zA-Zéçà0-9]+$/;
         titreRex.test(this.state.titre) === false ? this.setState({ titreError: (<small className="text-danger">Le titre est obligatoire.</small>) }):this.setState({ titreError: null });
         this.state.nomEquipe === "" ? this.setState({ nomEquipeError: (<small className="text-danger">Nom Equipe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
         if(descriptionRex.test(this.state.description)&&titreRex.test(this.state.titre)&&digitRex.test(this.state.nbrEquipeParProjet)){
             e.preventDefault();
-            return fetch("http://localhost:5000/sujets/add", {
+            console.log('updating...');
+            return fetch("http://localhost:5000/sujets/update/"+this.props.match.params.id, {
               method: "POST",
               mode: "cors",
               headers: {
@@ -113,7 +134,7 @@ class SujetForms extends Component{
                                                     Titre<small className="text-danger">*</small>
                                                 </Col>
                                                 <Col sm={6}>
-                                                    <FormControl type="text" name="titre" onChange={(event) => {
+                                                    <FormControl type="text" name="titre" value={this.state.titre} onChange={(event) => {
                                                         this.setState({titre: event.target.value});
                                                         event.target.value === "" ? this.setState({ type_textError: (<small className="text-danger">Text is required.</small>) }):this.setState({ type_textError: null });
                                                     }}/>
@@ -125,7 +146,7 @@ class SujetForms extends Component{
                                                     Description <small className="text-danger">*</small>
                                                 </Col>
                                                 <Col sm={6}>
-                                                    <FormControl type="textarea" name="description" onChange={(event) => {
+                                                    <FormControl type="textarea" value={this.state.description} name="description" onChange={(event) => {
                                                         this.setState({description: event.target.value});
                                                         var descriptionRex = /[-a-zA-Z:%&?!=//\s]{10,}$/;
                                                         descriptionRex.test(this.state.description) === false ? this.setState({ descriptionError: (<small className="text-danger">La description est obligatoire et doit etre de longueur 10 min.</small>) }):this.setState({ descriptionError: null });
@@ -143,7 +164,7 @@ class SujetForms extends Component{
                                                     name="singleSelect"
                                                     value={this.state.type}
                                                     options={this.state.selectOptions}
-                                                    onChange={(value) => { console.log(value);
+                                                    onChange={(value) => {
                                                         this.setState({ type: value}) } }
                                                 />
                                             </Col>
@@ -153,7 +174,7 @@ class SujetForms extends Component{
                                                     Nombre d'equipe par sujet
                                                 </Col>
                                                 <Col sm={6}>
-                                                    <FormControl type="number" name="nbrEquipeParProjet" onChange={(event) => {
+                                                    <FormControl type="number" name="nbrEquipeParProjet" value={this.state.nbrEquipeParProjet} onChange={(event) => {
                                                         this.setState({nbrEquipeParProjet: event.target.value});
                                                         var digitRex = /^\d+$/;
                                                         digitRex.test(event.target.value) === false ? this.setState({ nbrEquipeParProjetError: (<small className="text-danger">nbrEquipeParProjet has to be a number.</small>) }):this.setState({ nbrEquipeParProjetError: null });
@@ -177,4 +198,4 @@ class SujetForms extends Component{
     }
 }
 
-export default SujetForms;
+export default SujetEdit;

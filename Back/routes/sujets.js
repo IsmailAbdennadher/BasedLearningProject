@@ -7,6 +7,11 @@ router.route('/').get((req, res) => {
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
+router.route('/:id').get((req, res) => {
+  Sujet.findById(req.params.id).populate('porteur_projet').populate('equipes')
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
 router.route('/sujets/acceptee').get((req, res) => {
   Sujet.find({accepte:1}).populate('porteur_projet').populate('equipes')
     .then(users => res.json(users))
@@ -107,7 +112,6 @@ router.route('/affecter/aleatoire').post(async function(req, res){
   var arrayIndiceChoix=[];
   const arrayRestant=[];
   array=await getAllSujets(listeEquipes,res);
-  //console.log('ya si zebi odhhor'+array[0]["_id"]);
   var j=0;
   var breakLoop=false;
   while(!breakLoop){
@@ -170,7 +174,6 @@ router.route('/affecter/aleatoire').post(async function(req, res){
   	//console.log('element de l index ='+arraySujets[s]);
   	//console.log('count='+arraySujets[s].length);
   arrayJson.length=0;
-  //var arraySujets=foo(listeEquipes);
   
   
 });

@@ -9,12 +9,15 @@ import {
     Switch,
     Route,
     Redirect,
-    Link
+    Link,
+    BrowserRouter as Router
 } from 'react-router-dom';
 
 import Card from 'components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
+
+import SujetEdit from 'views/Forms/SujetEdit.jsx';
 
 
 class ListeSujets extends Component{
@@ -92,16 +95,16 @@ class ListeSujets extends Component{
                 <SweetAlert
                     success
                     style={{display: "block",marginTop: "-100px"}}
-                    title="Deleted!"
-                    onConfirm={() => this.hideAlert()}
+                    title="Supprimé!"
+                    onConfirm={() => window.location.reload()}
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"
                 >
-                    Your imaginary file has been deleted.
+                    Le sujet a été supprimé.
                 </SweetAlert>
             )
         });
-        window.location.reload();
+        
     }
     warningWithConfirmMessage(id){
         this.setState({
@@ -124,6 +127,7 @@ class ListeSujets extends Component{
         });
     }
     render(){
+
         const defaultPanel = this.state.sujets.map((props,key) =>
             <PanelGroup id="accordion" ref="panels" onClick={() => this.forceUpdate()}>
                 <Panel
@@ -139,7 +143,7 @@ class ListeSujets extends Component{
                     <b>Description</b>: {props.description} <br/>
                     <b>Nombre d'equipe par projet</b>: {props.nbrEquipeParProjet} <br/>
                     {props.accepte? <button className="btn-wd btn btn-success">Accepter sujet</button> : "" }
-                    <button className="btn-wd btn btn-default"><span className="btn-label"><i className="fa fa-edit"></i></span><Link to="/forms/sujets" >Modifier sujet</Link></button>
+                    <button className="btn-wd btn btn-default"><span className="btn-label"><i className="fa fa-edit"></i></span><Link to={"/edit/sujets/"+props._id}>Modifier sujet</Link></button>
                     <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessage.bind(this,props._id)}><span className="btn-label"><i className="fa fa-trash"></i></span>Supprimer sujet</button>
                 </Panel>
             </PanelGroup>
@@ -295,30 +299,6 @@ class ListeSujets extends Component{
                                 category=""
                                 content={defaultPanel}
                             />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={6}>
-                            <Card
-                                title="Tabs"
-                                category="Plain text tabs"
-                                content={tabs}
-                            />
-                        </Col>
-                        <Col md={6}>
-                            <Card
-                                title="Tabs & Icons"
-                                category="Tabs with icons and full width"
-                                ctFullWidth
-                                content={tabsIcons}
-                            />
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col md={8} mdOffset={2}>
-                            <h4 className="title text-center">Page Subcategories</h4>
-                            <br />
-                            {pageSubcategories}
                         </Col>
                     </Row>
                 </Grid>

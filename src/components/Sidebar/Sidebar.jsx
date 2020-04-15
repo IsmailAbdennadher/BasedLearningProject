@@ -83,7 +83,7 @@ class Sidebar extends Component{
                             <img src={avatar} alt="Avatar"/>
                         </div>
                         <div className="info">
-                            <a onClick={ ()=> this.setState({ openAvatar: !this.state.openAvatar })}>
+                            <a onClick={ () => this.setState({ openAvatar: !this.state.openAvatar })}>
                                 <span>
                                     Tania Andrew
                                     <b className={this.state.openAvatar ? "caret rotate-180":"caret"}></b>
@@ -131,7 +131,7 @@ class Sidebar extends Component{
                                 if(prop.collapse){
                                     return (
                                         <li className={this.activeRoute(prop.path)} key={key}>
-                                            <a onClick={ ()=> this.setState(st)}>
+                                            <a onClick={ () => this.setState(st)}>
                                                 <i className={prop.icon}></i>
                                                 <p>{prop.name}
                                                    <b className={this.state[prop.state] ? "caret rotate-180":"caret"}></b>
@@ -141,7 +141,8 @@ class Sidebar extends Component{
                                                 <ul className="nav">
                                                     {
                                                         prop.views.map((prop,key) => {
-                                                            return (
+                                                            if(prop.invisible==null){
+                                                                return (
                                                                 <li className={this.activeRoute(prop.path)} key={key}>
                                                                     <NavLink to={prop.path} className="nav-link" activeClassName="active">
                                                                         <span className="sidebar-mini">{prop.mini}</span>
@@ -149,6 +150,8 @@ class Sidebar extends Component{
                                                                     </NavLink>
                                                                 </li>
                                                             );
+                                                            }
+                                                            
                                                         })
                                                     }
                                                 </ul>
