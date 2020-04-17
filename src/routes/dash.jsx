@@ -23,6 +23,8 @@ import EquipeForms from 'views/Forms/EquipeForms.jsx';
 import SujetForms from 'views/Forms/SujetForms.jsx';
 import ListeSujets from 'views/Components/ListeSujets.jsx';
 import SujetEdit from 'views/Forms/SujetEdit.jsx';
+import EquipesAleatoire from 'views/Tables/EquipesAleatoire.jsx';
+import FormationEquipe from 'views/Forms/FormationEquipe.jsx';
 
 import pagesRoutes from './pages.jsx';
 
@@ -41,16 +43,19 @@ var dashRoutes = [
     },
     { collapse: true, path: "/forms", name: "Forms", state: "openForms", icon: "pe-7s-note2", views:
         [{ path: "/forms/equipes", name: "Ajouter Equipe", mini: "EE", component: EquipeForms },
+        { path: "/forms/FormerEquipe", name: "Formation Equipe", mini: "FE", component: FormationEquipe },
         { path: "/forms/sujets", name: "Ajouter Sujet", mini: "AS", component: SujetForms },
         { path: "/forms/Listesujets", name: "Liste Sujets", mini: "LS", component: ListeSujets },
         { path: "/edit/sujets/:id", name: "Modifer Sujet", mini: "AS", component: SujetEdit , invisible:true },
-        { path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms, invisible:true },
-        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms, invisible:true },
-        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms, invisible:true },
+        { path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
+        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms },
+        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms },
         { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, invisible:true }]
     },
     { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
-        [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
+        [
+        { path: "/tables/ListeAleatoire", name: "Liste aleatoire", mini: "LA", component: EquipesAleatoire, invisible:true },
+        { path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
         { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
         { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
     },
