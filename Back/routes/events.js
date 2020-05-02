@@ -7,6 +7,18 @@ router.route('/').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/projets').get((req, res) => {
+  Event.find({ projet :  {$exists : true} })
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/:id').get((req, res) => {
+  Event.findById(req.params.id)
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/add').post((req, res) => {
   const nom = req.body.nom;
   const event_parent=req.body.event_parent;
@@ -34,16 +46,33 @@ router.route('/add').post((req, res) => {
 });
 
 
-router.route('/update/:id').post((req, res) => {
+router.route('projets/update/:id').post((req, res) => {
   Event.findById(req.params.id)
     .then(event => {
-      event.username = req.body.username;
-      event.description = req.body.description;
+       event.nom = req.body.nom;
+   event.event_parent=req.body.event_parent;
+   event.categorie= req.body.categorie;
+   event.description= req.body.description;
+   event.dateDebut= Date.parse(req.body.dateDebut);
+   event.dateFin= Date.parse(req.body.dateFin);
+   //event.type= req.body.type;
+   event.nbrPlace= Number(req.body.nbrPlace);
+   event.lieu= req.body.lieu;
+    event.projet.nom=req.body.projet.nom;
+    event.projet.niveau_concerne= req.body.projet.niveau_concerne;
+    event.projet.nbrEquipeMax= Number(req.body.projet.nbrEquipeMax);
+    event.projet.anneeScolaire=req.body.projet.anneeScolaire;
 
       event.save()
         .then(evt => res.json(evt))
         .catch(err => res.status(400).json('Error: ' + err));
     })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/:id').delete((req, res) => {
+  Event.findByIdAndDelete(req.params.id)
+    .then(() => res.json('Projet deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 

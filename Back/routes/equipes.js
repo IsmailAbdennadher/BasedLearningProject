@@ -28,14 +28,11 @@ router.route('/add').post((req, res) => {
 
   
 });
-router.route('/addSujet').post((req, res) => {
-  const nomEquipe = req.body.nomEquipe;
+router.route('/addSujets').post((req, res) => {
   const choixSujet = req.body.choixSujet;
-  	const newEquipe = new Equipe({nomEquipe,choixSujet});
-
-  newEquipe.save()
-    .then(equipe => res.json(equipe.populate('membres')))
-    .catch(err => res.status(400).json('Error: ' + err));
+  Equipe.findById(req.body.id).then(equipe => {equipe.choixSujet=choixSujet;
+    equipe.save().then(eq => res.json(equipe.populate('membres').populate('choixSujet')))
+  }).catch(err => res.status(400).json('Error: ' + err));
   
 });
 
@@ -192,6 +189,38 @@ router.route('/:id').delete((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/permute').post((req, res) => {
+     
+     const result=[];
+    Equipe.findById(req.body.key[0])
+    .then(equipe => {
+      for(var x of req.body.valeur1){
+        equipe.membres.splice(equipe.membres.indexOf(x),1);
+      }
+      equipe.membres.push(req.body.valeur2);
+      //equipe.description = req.body.description;
+      result.push(equipe);
+      equipe.save()
+        .then(() => console.log('equipe 1 updated'))
+        .catch(err => res.status(400).json('Error: ' + err));
+    }).then(() => {Equipe.findById(req.body.key[1])
+    .then(equipe => {
+      for(var y of req.body.valeur2){
+        equipe.membres.splice(equipe.membres.indexOf(y),1);
+      }
+      equipe.membres.push(req.body.valeur1);
+      result.push(equipe);
+      //equipe.description = req.body.description;
+
+      equipe.save()
+        .then(() => Equipe.populate(result,{ path: 'membres'}).then(equipes => res.json(equipes)))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })})
+    .catch(err => res.status(400).json('Error: ' + err));
+
+  
+});
+
 router.route('/update/:id').post((req, res) => {
   Equipe.findById(req.params.id)
     .then(equipe => {
@@ -202,6 +231,13 @@ router.route('/update/:id').post((req, res) => {
         .then(() => res.json('Equipe updated!'))
         .catch(err => res.status(400).json('Error: ' + err));
     })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/equipes/:classe').get((req, res) => {
+
+  Equipe.find().populate('choixSujet').populate('membres',null,{classe: req.params.classe})
+    .then(equipe => res.json(equipe))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 

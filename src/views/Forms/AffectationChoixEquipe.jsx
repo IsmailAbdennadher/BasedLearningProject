@@ -21,7 +21,7 @@ import 'react-select/dist/react-select.css';
 import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
-class FormationEquipe extends Component{
+class AffectationChoixEquipe extends Component{
     constructor(props){
         super(props);
         this.vForm = this.refs.vForm;
@@ -130,14 +130,14 @@ class FormationEquipe extends Component{
             e.preventDefault();
         }
     }
-    async formerEquipe(){
-        await fetch("http://localhost:5000/equipes/former/aleatoire/3A22", { // TODO classe dynamique
+    async AffecterChoixEquipe(){
+        await fetch("http://localhost:5000/sujets/affecter/aleatoire", {   
               method: "POST",
               mode: "cors",
               headers: {
                     "Content-Type": "application/json"
                 },
-              body: JSON.stringify({ idProjet: "5e7e2af2b5e8642830f635db" })
+              body: JSON.stringify({ listEquipes: "5e7e2af2b5e8642830f635db" })
             })
               .then(response => {
                if (!response.ok) {
@@ -163,7 +163,7 @@ class FormationEquipe extends Component{
                 <Grid fluid>
                     <Row>
                         <Col md={12}>
-                            <Form horizontal action='google.com'>
+                            <Form horizontal>
                                 <Card
                                     title={
                                         <legend>Ajout equipe</legend>
@@ -177,7 +177,7 @@ class FormationEquipe extends Component{
                                                 <Col sm={6}>
                                                     <FormControl type="text" name="nomEquipe" onChange={(event) => {
                                                         this.setState({nomEquipe: event.target.value});
-                                                        event.target.value === "" ? this.setState({ nomEquipeError: (<small className="text-danger">Nom Equipe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
+                                                        event.target.value === "" ? this.setState({ nomEquipeError: (<small className="text-danger">classe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
                                                     }}/>
                                                     {this.state.nomEquipeError}
                                                 </Col>
@@ -186,7 +186,7 @@ class FormationEquipe extends Component{
                                     }
                                     ftTextCenter
                                     legend={
-                                        <Button fill bsStyle="info" onClick={this.formerEquipe.bind(this)}>Valider</Button>
+                                        <Button fill bsStyle="info" onClick={this.AffecterChoixEquipe.bind(this)}>Valider</Button>
                                     }
                                 />
                             </Form>
@@ -198,4 +198,4 @@ class FormationEquipe extends Component{
     }
 }
 
-export default FormationEquipe;
+export default AffectationChoixEquipe;

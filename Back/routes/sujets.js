@@ -54,7 +54,7 @@ async function getAllSujets(listeEquipes,res) {
     await delay();
     // GET information about each book
     //console.log('votre tableau est '+arrayJson);
-    res.json(arrayJson);
+    //res.json(arrayJson);
     return arrayJson;
   } catch(error) {
     // If any of the awaited promises was rejected, this catch block
@@ -171,6 +171,26 @@ router.route('/affecter/aleatoire').post(async function(req, res){
   		breakLoop=true;
   	}
   }
+  const resultats=[];
+  for (var i in arraySujets) {
+    if(arraySujets[i].length==1){
+      await Equipe.findById(arraySujets[i]).then((equipe) => {
+        equipe.sujet=i;
+        resultats.push(equipe);
+        equipe.save().then((equipe) => console.log(equipe.nomEquipe+" : "+equipe.sujet))
+      })
+    }
+    else{
+      for(var x of arraySujets[i]){
+        await Equipe.findById(x).then((equipe) => {
+        equipe.sujet=i;
+        resultats.push(equipe);
+        equipe.save().then((equipe) => console.log(equipe.nomEquipe+" : "+equipe.sujet))
+      })
+      }
+    }
+    }
+  Equipe.populate(resultats,[{path:'choixSujet'},{path:'sujet'}]).then((equipes) => res.json(equipes));
   	//console.log('element de l index ='+arraySujets[s]);
   	//console.log('count='+arraySujets[s].length);
   arrayJson.length=0;
