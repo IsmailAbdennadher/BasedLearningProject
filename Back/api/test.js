@@ -298,11 +298,16 @@ router.post('/reset-password',(req,res)=>{
     })
 });
 
-router.get("/group-by-UE",(req,res)=>{
+router.post("/group-by-UE",(req,res)=>{
     var list = [];
+    var tuts = [];
     User.find((err,users)=>{
         if(err) res.json(err);
         users.forEach(e=>{
+            if(e.role[0].nom==="apprenant")
+                tuts.push(e)
+        })
+        tuts.forEach(e=>{
             e.competances.forEach(c=>{
                 if(c.nom===req.body.nomCompetance && c.UE < 10) {
                     list.push(e)
@@ -321,20 +326,27 @@ router.get("/group-by-UE",(req,res)=>{
 
 });
 
-router.get("/group-random",(req,res)=>{
+router.post("/group-random",(req,res)=>{
     var list = [];
+    var tuts = [];
     User.find((err,users)=>{
-        if(err) res.json(err);
-        for (i = 0; i < 2; i++) {
-        var r =Math.ceil(Math.random() * users.length);
+        if(err) res.json(err)
+        users.forEach(e=>{
+            if(e.role[0].nom==="apprenant")
+                tuts.push(e)
+        })
+
+        for (i = 0; i < 4; i++) {
+        var r =Math.ceil(Math.random() * tuts.length);
         console.log(r);
-        list.push(users[r-1]);}
+        list.push(tuts[r-1]);}
         console.log(list)
         User.findOneAndUpdate({email: req.body.email}, {$set: {groupe:list}}, {new: true}, (err, doc) => {
             if(!doc) res.json({message:"Something wrong when updating data!"})
             else if (err) {
                 console.log("Something wrong when updating data!");
             }
+            else
             res.json(doc)
         })
 

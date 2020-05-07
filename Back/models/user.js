@@ -23,7 +23,7 @@ var userSchema = new mongoose.Schema({
     classe : {type : String , default : null},
     profession: {type : String , default : null},
     competances : [competance],
-    isActif : {type : Boolean, default:true},
+    isActif : {type : Boolean, default:false},
     sexe : {type : String , default : "autre"},
     universite : {type : String , default : null},
     diplome : {type : String , default : null},
