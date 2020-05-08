@@ -134,9 +134,12 @@ class EquipesChoixTable extends Component{
                                         <tbody>
                                         {props.choixSujet.map((prop,keys) => {
                                             console.log('jawek fes fes');
+                                            var color=props.sujet;
+                                            var styling="white";
+                                            color ? (props.sujet.titre===prop.titre ? styling="lightblue" : color=false) : color=false ;
 
                                             return(
-                                            <tr key={keys}>
+                                            <tr key={keys} style={ {backgroundColor : styling} }>
                                                 <td className="text-left">{keys+1}</td>
                                                 <td>{prop.titre}</td>
                                                 <td className="text-right action" hidden>
@@ -161,6 +164,7 @@ class EquipesChoixTable extends Component{
                                         </tbody>
                                         <tfoot>
                                         <tr>
+                                        <span style={ {color : "blue"} }>{props.sujet ? "Sujet affecté: "+props.sujet.titre : "Sujet affecté: aucun sujet n'est affecté"}</span>
                                         </tr>
                                         </tfoot>
                                     </Table>

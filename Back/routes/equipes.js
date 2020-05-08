@@ -236,7 +236,7 @@ router.route('/update/:id').post((req, res) => {
 
 router.route('/equipes/:classe').get((req, res) => {
 
-  Equipe.find().populate('choixSujet').populate('membres',null,{classe: req.params.classe})
+  Equipe.find().populate('choixSujet').populate('membres',null,{classe: req.params.classe}).populate('sujet')
     .then(equipe => res.json(equipe))
     .catch(err => res.status(400).json('Error: ' + err));
 });
