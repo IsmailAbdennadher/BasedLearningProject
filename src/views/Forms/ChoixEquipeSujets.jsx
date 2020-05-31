@@ -12,6 +12,7 @@ import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import jwt_decode from "jwt-decode";
 
 class ChoixEquipeSujets extends Component{
     constructor(props){
@@ -19,7 +20,7 @@ class ChoixEquipeSujets extends Component{
         this.vForm = this.refs.vForm;
         this.state = {
             // Register
-            titre: "",
+            equipe_id: "",
             description: "",
             type: new Map(), //select box
             accepte: false,
@@ -34,18 +35,34 @@ class ChoixEquipeSujets extends Component{
             resultOptions:[]
         }
         this.getTopics();
+
     }
     getTopics(){
-        return fetch("http://localhost:5000/sujets/")
+        return fetch("http://localhost:4000/events/"+localStorage.projet)
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
                 }
                 return response.json();
-              }).then(sujets => {
-                  sujets.map((prop,key) => {this.state.selectOptions.push({value:prop._id,label:prop.titre});
+              }).then(projet => {
+                  projet.projet.sujets.map((prop,key) => {this.state.selectOptions.push({value:prop._id,label:prop.titre});
                       this.state.selectOptionsDefault.push({value:prop._id,label:prop.titre});});
-                  this.setState({sujets:sujets});
+                  this.setState({sujets:projet.projet.sujets});
+
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
+    }
+    getEquipeId(){
+      return fetch("http://localhost:4000/equipes/memberinteam/"+jwt_decode(localStorage.token).user._id)
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                return response.json();
+              }).then(equipe => {
+                  this.setState({equipe_id:equipe._id});
 
               })
               .catch(error => {
@@ -83,7 +100,7 @@ class ChoixEquipeSujets extends Component{
         this.state.nomEquipe === "" ? this.setState({ nomEquipeError: (<small className="text-danger">Nom Equipe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
         if(descriptionRex.test(this.state.description)&&titreRex.test(this.state.titre)&&digitRex.test(this.state.nbrEquipeParProjet)){
             e.preventDefault();
-            return fetch("http://localhost:5000/sujets/add", {
+            return fetch("http://localhost:4000/sujets/add", {
               method: "POST",
               mode: "cors",
               headers: {
@@ -135,13 +152,13 @@ class ChoixEquipeSujets extends Component{
               this.state.resultOptions.push(x[i].value);
           }
           // TODO affecter choix sujet a l'equipe
-          return fetch("http://localhost:5000/equipes/addSujets", {
+          return fetch("http://localhost:4000/equipes/addSujets", {
               method: "POST",
               mode: "cors",
               headers: {
                     "Content-Type": "application/json"
                 },
-              body: JSON.stringify({ id:"5ea020db60303b246877f3e4",choixSujet:this.state.resultOptions}) // TODO id_equipe
+              body: JSON.stringify({ id:this.state.equipe_id,choixSujet:this.state.resultOptions}) // TODO id_equipe
             })
               .then(response => {
                if (!response.ok) {

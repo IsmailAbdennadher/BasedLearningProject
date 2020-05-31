@@ -98,14 +98,16 @@ class EquipesAleatoire extends Component{
                     this.state.toPermutekey.push(key);
                     if(this.state.value.length!=0){
                     this.state.value=([...new Set(this.state.value)]);
-                    this.state.toPermutevalue1.push(this.state.value);
+                    for(var w of this.state.value){
+                        this.state.toPermutevalue1.push(w);
+                    }
                     this.state.value=[];
                     }
                 if(!this.state.toPermutevalue1.includes(value))
                     {this.state.toPermutevalue1.push(value);}
                 }
             }
-            fetch("http://localhost:5000/equipes/permute/", {
+            fetch("http://localhost:4000/equipes/permute/", {
               method: "POST",
               mode: "cors",
               headers: {
@@ -133,7 +135,8 @@ class EquipesAleatoire extends Component{
               });
         }
         console.log('terminé');
-        console.log('membres to permute'+this.state.toPermutevalue);
+        var ss=Array.from(new Set(this.state.toPermutevalue));
+        console.log('membres to permute'+JSON.stringify(ss));
         console.log('with'+this.state.toPermutevalue1);
     }
     plutard(){
@@ -144,7 +147,7 @@ class EquipesAleatoire extends Component{
                     if(key !=this.state.toPermutekey[0])
                         {this.state.toPermutekey.push(key);
                             this.state.toPermutevalue.push(value);
-                    fetch("http://localhost:5000/equipes/permute/", {
+                    fetch("http://localhost:4000/equipes/permute/", {
               method: "POST",
               mode: "cors",
               headers: {
@@ -187,7 +190,9 @@ class EquipesAleatoire extends Component{
                 //console.log('value='+this.state.memberChecked.get(key));
                 if(this.state.value.length!=0){
                     this.state.value=([...new Set(this.state.value)]);
-                    this.state.toPermutevalue.push(this.state.value);
+                    for(var z of this.state.value){
+                        this.state.toPermutevalue.push(z);
+                    }
                     this.state.value=[];
                 }
                 if(!this.state.toPermutevalue.includes(value))

@@ -10,11 +10,11 @@ import Card from 'components/Card/Card.jsx';
 
 
 class Panels extends Component{
-    componentDidUpdate(e){
+    /*componentDidUpdate(e){
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
             this._reactInternalInstance._currentElement._owner._instance._reactInternalInstance._currentElement._owner._instance.componentDidUpdate(e);
         }
-    }
+    }*/
     isMac(){
         let bool = false;
         if (navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.platform.toUpperCase().indexOf('IPAD') >= 0) {

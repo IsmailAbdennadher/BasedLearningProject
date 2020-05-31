@@ -38,10 +38,10 @@ class EquipesChoixTable extends Component{
             value:[],
             _notificationSystem: null
         };
-        this.handleClick();
+        //this.handleClick();
     }
     handleClick(){
-        return fetch("http://localhost:5000/equipes/equipes/3A22")
+        return fetch("http://localhost:4000/equipes/equipes/3A33")
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
@@ -72,9 +72,9 @@ class EquipesChoixTable extends Component{
             this.state.listIdEquipes.push(this.state.equipes[i]._id);
         }
     }
-    fairePermutation(){
+    /*fairePermutation(){
         this.getEquipesId();
-        fetch("http://localhost:5000/sujets/affecter/aleatoire" , {
+        fetch("http://localhost:4000/sujets/affecter/aleatoire" , {
               method: "POST",
               mode: "cors",
               headers: {
@@ -94,7 +94,7 @@ class EquipesChoixTable extends Component{
               .catch(error => {
                 this.handleError(error);
               });
-    }
+    }*/
     handleNotificationClick(message){
         this.state._notificationSystem.addNotification({
             title: (<span data-notify="icon" className="pe-7s-gift"></span>),
@@ -172,9 +172,7 @@ class EquipesChoixTable extends Component{
                             />
                             );
                             })}
-                       <Button id="btnPermute" onClick={this.fairePermutation.bind(this)}>Attribuer les sujets</Button>
-                       
-                       //<Button id="SubmitPermute" className="hidden" onClick={this.fairePermutation.bind(this)}>Confirmer permutation</Button>
+                       {/*<Button id="btnPermute" onClick={this.fairePermutation.bind(this)}>Attribuer les sujets</Button>*/}
                         </Col>
                     </Row>
                 </Grid>

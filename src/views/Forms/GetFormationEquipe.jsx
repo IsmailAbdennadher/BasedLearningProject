@@ -6,8 +6,6 @@ import {
 
 import Card from 'components/Card/Card.jsx';
 
-import SweetAlert from 'react-bootstrap-sweetalert';
-
 import {
     Switch,
     Route,
@@ -23,7 +21,7 @@ import 'react-select/dist/react-select.css';
 import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
-class FormationEquipe extends Component{
+class GetFormationEquipe extends Component{
     constructor(props){
         super(props);
         this.vForm = this.refs.vForm;
@@ -36,9 +34,7 @@ class FormationEquipe extends Component{
             classes:[],
             membres:[],
             limit:null, // a definir /* */
-            equipes:[],
-            alert: null,
-            show: false
+            equipes:[]
         }
         this.getClasses();
         
@@ -69,27 +65,6 @@ class FormationEquipe extends Component{
                 this.handleError(error);
               });
     }
-    dangerAlert(title,motif){
-        this.setState({
-            alert: (
-                <SweetAlert
-                    danger
-                    style={{display: "block",width: "75%",marginLeft:"-500px"}}
-                    title={title}
-                    onConfirm={() => this.props.history.push("/edit/projets/"+localStorage.projet)}
-                    onCancel={() => this.hideAlert()}
-                    confirmBtnBsStyle="info"
-                >
-                    {motif}
-                </SweetAlert>
-            )
-        });
-    }
-    hideAlert(){
-        this.setState({
-            alert: null
-        });
-    }
     handleResponseError(response) {
       throw new Error("HTTP error, status = " + response.status);
   }
@@ -97,42 +72,26 @@ class FormationEquipe extends Component{
       console.log(error.message);
   }
     async formerEquipe(){
-        await fetch("http://localhost:4000/equipes/former/aleatoire/"+this.state.selectedClasse.value, {
-              method: "POST",
-              mode: "cors",
-              headers: {
-                    "Content-Type": "application/json"
-                },
-              body: JSON.stringify({ idProjet: localStorage.projet })
-            })
+        await fetch("http://localhost:4000/equipes/equipes/"+this.state.selectedClasse.value)
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
                 }
-                console.log('ici');
-                console.log(response);
                 return response.json();
               }).then(equipe => {
-                  if(equipe.erreurmsg){
-                      this.dangerAlert(equipe.erreurmsg,equipe.motif);
-                  }
-                  else{
-                      console.log(equipe);
+                  console.log(equipe);
                   this.setState({equipes:equipe});
                   localStorage.setItem('equipes',JSON.stringify(this.state.equipes));
-                  this.props.history.push({pathname:"/tables/ListeAleatoire",state:{equipes:this.state.equipes}});
-                  }
               })
               .catch(error => {
                 this.handleError(error);
               });
               //console.log('ess'+localStorage.getItem('equipes'));
-        
+        this.props.history.push({pathname:"/tables/ListeEquipes",state:{equipes:this.state.equipes}});
     }
     render(){
         return (
             <div className="main-content">
-            {this.state.alert}
                 <Grid fluid>
                     <Row>
                         <Col md={12}>
@@ -153,9 +112,7 @@ class FormationEquipe extends Component{
                                                     
                                                     value={this.state.selectedClasse}
                                                     options={this.state.classes}
-                                                    onChange={(value) => {this.setState({selectedClasse:value});
-                                                    console.log("f "+value.value);
-                                                        } }
+                                                    onChange={(value) => {this.setState({selectedClasse:value});} }
                                                 />
                                             </Col>
                                             </FormGroup>
@@ -174,4 +131,4 @@ class FormationEquipe extends Component{
     }
 }
 
-export default FormationEquipe;
+export default GetFormationEquipe;

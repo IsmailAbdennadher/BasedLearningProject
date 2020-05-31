@@ -1,10 +1,16 @@
 const router = require('express').Router();
 let Equipe = require('../models/equipe.model');
-let User = require('../models/user.model');
+let User = require('../models/user');
 let Projet = require('../models/event.model');
 
 router.route('/').get((req, res) => {
   Equipe.find().populate('membres')
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/memberinteam/:id').get((req, res) => {
+  Equipe.find({membres:req.params.id}).populate('membres')
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -135,12 +141,13 @@ router.route('/former/aleatoire/:classe').post((req, res) => {
   				console.log("rest=0 "+users.length);
   				// avant de proceder a la division on doit verifier si on peut formé [nbrEquipeReduit] equipes de [nbrEquipeMax-1] ou pas
   				if((nbrEquipeReduit*(nbrEquipeMax-1))>users.length && firstIteration){ // si on ne peut pas
-  					console.log('La formation des equipes ne peut etre fait car '+users.length+' ne peut pas etre reparti en des groupes de '
+  					let msg1='La formation des equipes ne peut etre fait car '+users.length+' ne peut pas etre reparti en des groupes de '
   						+nbrEquipeMax+' et des '+(nbrEquipeMax-1)+
-  						'.Veuillez modifier le nombre des membres max par equipe.');
+  						'.Veuillez modifier le nombre des membres max par equipe.';
   					//on suggere de faire diminuer le nbrEquipeMax par 1 et de réessayez de faire la repartition
-  					console.log('Suggestion: Essayez de remplacer le nombre max par equipe '+nbrEquipeMax+' par '+(nbrEquipeMax-1)+' et réessayez.');
-  					break;
+  					let msg2='Suggestion: Essayez de remplacer le nombre max par equipe '+nbrEquipeMax+' par '+(nbrEquipeMax-1)+' et réessayez.';
+            res.json({erreurmsg:msg1,motif:msg2});
+            return;
   				}
   				else{ // sinon on procede a la repartition
 	  				nomEquipes[j]="Equipe "+j;

@@ -49,12 +49,12 @@ class ProjetForms extends Component{
                 <SweetAlert
                     success
                     style={{display: "block",marginTop: "-100px"}}
-                    title="Projet ajouté!"
+                    title="Projet modifié!"
                     onConfirm={() => this.props.history.push("/forms/Listeprojets")}
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"
                 >
-                    Votre projet a été ajouté avec succès!
+                    Votre projet a été modifié avec succès!
                 </SweetAlert>
             )
         });
@@ -66,7 +66,7 @@ class ProjetForms extends Component{
     }
     componentDidMount(){
         console.log('id='+this.props.match.params.id);
-        fetch("http://localhost:5000/events/"+this.props.match.params.id)
+        fetch("http://localhost:4000/events/"+this.props.match.params.id)
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
@@ -74,7 +74,7 @@ class ProjetForms extends Component{
                 return response.json();
               }).then(projet => {
                   this.setState({nom: projet.nom,description: projet.description,categorie:{value:projet.categorie,label:projet.categorie},
-                      nomProjet:projet.projet.nom,nbrEquipeParProjet:projet.projet.nbrEquipeMax,dateDebut: Date.parse(projet.dateDebut),dateFin:projet.dateFin,
+                      nomProjet:projet.projet.nom,nbrEquipeParProjet:projet.projet.nbrEquipeMax,dateDebut: projet.dateDebut,dateFin:projet.dateFin,
                       anneeScolaire:projet.projet.anneeScolaire,niveau:projet.projet.niveau_concerne});
               })
               .catch(error => {
@@ -96,16 +96,16 @@ class ProjetForms extends Component{
       projet.nom=this.state.nomProjet;
       projet.niveau_concerne= this.state.niveau;
       projet.nbrEquipeMax= this.state.nbrEquipeParProjet;
-      projet.anneeScolaire=this.state.anneeScolaire.value;
-            return fetch("http://localhost:5000/events/projets/update/"+this.props.match.params.id, {
+      projet.anneeScolaire=this.state.anneeScolaire;
+            return fetch("http://localhost:4000/events/projets/update/"+this.props.match.params.id, {
               method: "POST",
               mode: "cors",
               headers: {
                     "Content-Type": "application/json"
                 },
               body: JSON.stringify({ nom: this.state.nom,description:this.state.description,nbrPlace:0,
-                  categorie:this.state.categorie.value,dateDebut: this.state.dateDebut.toISOString(),
-                   dateFin: this.state.dateFin.toISOString(),projet:projet })
+                  categorie:this.state.categorie.value,dateDebut: new Date(this.state.dateDebut).toISOString(),
+                   dateFin: new Date(this.state.dateFin).toISOString(),projet:projet })
             })
               .then(response => {
                if (!response.ok) {
@@ -262,7 +262,7 @@ class ProjetForms extends Component{
                                                     value={this.state.anneeScolaire}
                                                     options={anneeScolaire}
                                                     onChange={(value) => { console.log(value);
-                                                        this.setState({ anneeScolaire: value}) } }
+                                                        this.setState({ anneeScolaire: value.value}) } }
                                                 />
                                                 </Col>
                                             </FormGroup>

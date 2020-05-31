@@ -4,7 +4,7 @@ import {
     Accordion, PanelGroup, Panel,
     Nav, NavItem,
     Tab
-} from 'react-bootstrap/lib';
+} from 'react-bootstrap';
 import {
     Switch,
     Route,
@@ -17,13 +17,10 @@ import Card from 'components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 
+import SujetEdit from 'views/Forms/SujetEdit.jsx';
 
-class ListeProjets extends Component{
-    /*componentDidUpdate(e){
-        if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
-            this._reactInternalInstance._currentElement._owner._instance._reactInternalInstance._currentElement._owner._instance.componentDidUpdate(e);
-        }
-    }*/
+
+class ListeSujetsProjets extends Component{
     isMac(){
         let bool = false;
         if (navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.platform.toUpperCase().indexOf('IPAD') >= 0) {
@@ -36,13 +33,13 @@ class ListeProjets extends Component{
         this.state = {
             alert: null,
             show: false,
-            projets:[]
+            sujets:[]
         }
         this.hideAlert = this.hideAlert.bind(this);
         this.successDelete = this.successDelete.bind(this);
         this.warningWithConfirmMessage= this.warningWithConfirmMessage.bind(this);
-        //this.getprojets();
-        console.log(this.state.projets);
+        //this.getSujets();
+        console.log(this.state.sujets);
     }
     handleResponseError(response) {
       throw new Error("HTTP error, status = " + response.status);
@@ -51,7 +48,7 @@ class ListeProjets extends Component{
       console.log(error.message);
   }
     componentDidMount(){
-        return fetch("http://localhost:4000/events/projets")
+        return fetch("http://localhost:4000/events/"+localStorage.projet)
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
@@ -59,7 +56,7 @@ class ListeProjets extends Component{
                 return response.json();
               }).then(projet => {
                   console.log(projet);
-                  this.setState({projets:projet});
+                  this.setState({sujets:projet.projet.sujets});
               })
               .catch(error => {
                 this.handleError(error);
@@ -72,12 +69,13 @@ class ListeProjets extends Component{
     }
     successDelete(id){
         console.log('id='+id);
-        fetch("http://localhost:4000/events/"+id, {
-              method: "DELETE",
+        fetch("http://localhost:4000/events/projets/"+localStorage.projet+"/removetopic", {
+              method: "POST",
               mode: "cors",
               headers: {
                     "Content-Type": "application/json"
-                }
+                },
+              body: JSON.stringify({ removedtopic: id })
             })
               .then(response => {
                if (!response.ok) {
@@ -98,7 +96,7 @@ class ListeProjets extends Component{
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"
                 >
-                    Le projet a été supprimé.
+                    Le sujet a été supprimé.
                 </SweetAlert>
             )
         });
@@ -115,7 +113,7 @@ class ListeProjets extends Component{
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"
                     cancelBtnBsStyle="danger"
-                    confirmBtnText="Oui, Supprimer le projet!"
+                    confirmBtnText="Oui, Supprimer le sujet!"
                     cancelBtnText="Annuler"
                     showCancel
                 >
@@ -124,32 +122,20 @@ class ListeProjets extends Component{
             )
         });
     }
-    gererProjet(id,nom){
-        localStorage.setItem('projet',id);
-        localStorage.setItem('projet-nom',nom);
-        window.location.reload();
-        console.log(localStorage.projet);
-    }
     render(){
 
-        const defaultPanel = this.state.projets.map((props,key) =>
+        const defaultPanel = this.state.sujets.map((props,key) =>
             <PanelGroup id="accordion" ref="panels" onClick={() => this.forceUpdate()}>
                 <Panel eventKey="1">
-                            <Panel.Heading>
-                          <Panel.Title toggle>{props.projet.nom}</Panel.Title>
+                        <Panel.Heading>
+                          <Panel.Title toggle>{props.titre}</Panel.Title>
                         </Panel.Heading>
-                    <Panel.Body collapsible>
-                    <b>Annee universitaire</b>: {props.projet.anneeScolaire} <br/>
-                    <b>Niveau concerne</b>: {props.projet.niveau_concerne} <br/>
-                    <b>Categorie</b>: {props.categorie} <br />
+                        <Panel.Body collapsible>
+                    <b>Type</b>: {props.type} <br />
                     <b>Description</b>: {props.description} <br/>
-                    <b>Nombre d'equipe par projet</b>: {props.projet.nbrEquipeMax} <br/>
-                    <b>Date debut</b>: {props.dateDebut.substr(0,10)} <br/>
-                    <b>Date fin</b>: {props.dateFin.substr(0,10)} <br/>
-                    <button className="btn-wd btn btn-success" onClick={this.gererProjet.bind(this,props._id,props.projet.nom)}>Gérer le projet</button>
-                    <button className="btn-wd btn btn-default"><span className="btn-label"><i className="fa fa-edit"></i></span><Link to={"/edit/projets/"+props._id}>Modifier projet</Link></button>
-                    <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessage.bind(this,props._id)}><span className="btn-label"><i className="fa fa-trash"></i></span>Supprimer projet</button>
-                </Panel.Body>
+                    <b>Nombre d'equipe par projet</b>: {props.nbrEquipeParProjet} <br/>
+                    <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessage.bind(this,props._id)}><span className="btn-label"><i className="fa fa-trash"></i></span>Supprimer sujet</button>
+                    </Panel.Body>
                 </Panel>
             </PanelGroup>
         );
@@ -300,7 +286,7 @@ class ListeProjets extends Component{
                     <Row>
                         <Col md={9}>
                             <Card
-                                title="Liste des projets"
+                                title="Liste des sujets proposés"
                                 category=""
                                 content={defaultPanel}
                             />
@@ -312,4 +298,4 @@ class ListeProjets extends Component{
     }
 }
 
-export default ListeProjets;
+export default ListeSujetsProjets;

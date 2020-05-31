@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Collapse } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 // this is used to create scrollbars on windows devices like the ones from apple devices
@@ -16,6 +16,8 @@ import logo from "logo.svg";
 
 import dashRoutes from 'routes/dash.jsx';
 
+import jwt_decode from "jwt-decode";
+
 const bgImage = {backgroundImage: "url("+image+")"};
 
 class Sidebar extends Component{
@@ -29,7 +31,8 @@ class Sidebar extends Component{
             openMaps: (this.activeRoute("/maps") !== '' ? true:false),
             openPages: (this.activeRoute("/pages") !== '' ? true:false),
             isWindows: (navigator.platform.indexOf('Win') > -1 ? true : false),
-            width: window.innerWidth
+            width: window.innerWidth,
+            user:localStorage.token? jwt_decode(localStorage.token).user : {nom:"tomato",prenom:"tomato"}
         }
     }
     // verifies if routeName is the one active (in browser input)
@@ -62,6 +65,11 @@ class Sidebar extends Component{
         }
         return bool;
     }
+    logoutProjet(){
+        localStorage.removeItem('projet');
+        localStorage.removeItem('projet-nom');
+        //window.location.reload();
+    }
     render(){
         return (
 
@@ -85,7 +93,17 @@ class Sidebar extends Component{
                         <div className="info">
                             <a onClick={ () => this.setState({ openAvatar: !this.state.openAvatar })}>
                                 <span>
-                                    Tania Andrew
+                                    {this.state.user.nom+" "+this.state.user.prenom}
+                                    <br/>
+                                    {localStorage.projet &&
+                                        <Fragment>
+                                    <small><b>en train de gérer projet:</b></small><br/>
+                                    <div className="text-center"><small>{localStorage.getItem('projet-nom')}</small></div>
+                                    <div className="text-center">
+                                    <button className="btn-sm btn btn-info" onClick={this.logoutProjet.bind(this)}>Annuler</button>
+                                    </div>
+                                    </Fragment>
+                                    }
                                     <b className={this.state.openAvatar ? "caret rotate-180":"caret"}></b>
                                 </span>
                             </a>
@@ -141,7 +159,7 @@ class Sidebar extends Component{
                                                 <ul className="nav">
                                                     {
                                                         prop.views.map((prop,key) => {
-                                                            if(prop.invisible==null){
+                                                            if(prop.invisible==null || prop.invisible==false){
                                                                 return (
                                                                 <li className={this.activeRoute(prop.path)} key={key}>
                                                                     <NavLink to={prop.path} className="nav-link" activeClassName="active">

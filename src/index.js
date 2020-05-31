@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import {
     HashRouter,
     Route,
-    Switch
+    Switch,
+    BrowserRouter
 } from 'react-router-dom';
 
 import indexRoutes from './routes/index.jsx';
@@ -16,7 +17,7 @@ import './assets/css/demo.css';
 import './assets/css/pe-icon-7-stroke.css';
 
 ReactDOM.render((
-    <HashRouter>
+    <BrowserRouter>
         <Switch>
             {
                 indexRoutes.map((prop,key) => {
@@ -26,6 +27,6 @@ ReactDOM.render((
                 })
             }
         </Switch>
-    </HashRouter>
+    </BrowserRouter>
 ), document.getElementById('root'));
 registerServiceWorker();

@@ -7,6 +7,7 @@ import {
 import Card from 'components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
+import jwt_decode from "jwt-decode";
 
 import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
@@ -42,6 +43,7 @@ class ProjetForms extends Component{
             ],
         }
         this.state.categorie=this.state.selectOptions[0];
+        console.log('votre utilisateur'+jwt_decode(localStorage.token).user.role[0].nom);
     }
     successAlert(){
         this.setState({

@@ -14,7 +14,7 @@ router.route('/projets').get((req, res) => {
 });
 
 router.route('/:id').get((req, res) => {
-  Event.findById(req.params.id)
+  Event.findById(req.params.id).populate('projet.sujets')
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
@@ -46,15 +46,15 @@ router.route('/add').post((req, res) => {
 });
 
 
-router.route('projets/update/:id').post((req, res) => {
+router.route('/projets/update/:id').post((req, res) => {
   Event.findById(req.params.id)
     .then(event => {
        event.nom = req.body.nom;
    event.event_parent=req.body.event_parent;
    event.categorie= req.body.categorie;
    event.description= req.body.description;
-   event.dateDebut= Date.parse(req.body.dateDebut);
-   event.dateFin= Date.parse(req.body.dateFin);
+   event.dateDebut= req.body.dateDebut;
+   event.dateFin= req.body.dateFin;
    //event.type= req.body.type;
    event.nbrPlace= Number(req.body.nbrPlace);
    event.lieu= req.body.lieu;
@@ -62,6 +62,30 @@ router.route('projets/update/:id').post((req, res) => {
     event.projet.niveau_concerne= req.body.projet.niveau_concerne;
     event.projet.nbrEquipeMax= Number(req.body.projet.nbrEquipeMax);
     event.projet.anneeScolaire=req.body.projet.anneeScolaire;
+
+      event.save()
+        .then(evt => res.json(evt))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+router.route('/projets/:id/addtopics').post((req, res) => {
+  Event.findById(req.params.id)
+    .then(event => {
+      for(var x of req.body.topics){
+       event.projet.sujets.push(x);
+      }
+
+      event.save()
+        .then(evt => res.json(evt))
+        .catch(err => res.status(400).json('Error: ' + err));
+    })
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+router.route('/projets/:id/removetopic').post((req, res) => {
+  Event.findById(req.params.id)
+    .then(event => {
+      event.projet.sujets.splice(event.projet.sujets.indexOf(req.body.removedtopic),1);
 
       event.save()
         .then(evt => res.json(evt))

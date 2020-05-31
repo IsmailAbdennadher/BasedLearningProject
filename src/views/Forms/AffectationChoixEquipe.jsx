@@ -6,6 +6,8 @@ import {
 
 import Card from 'components/Card/Card.jsx';
 
+import SweetAlert from 'react-bootstrap-sweetalert';
+
 import {
     Switch,
     Route,
@@ -29,70 +31,51 @@ class AffectationChoixEquipe extends Component{
             // Type
             nomEquipe: "",
             nomEquipeError: "",
-            multipleSelect:null,
-            membres:[],
-            limit:null, // a definir /* */
-            equipes:[]
+            selectedClasse:null,
+            classes:[],
+            count:0, // a definir /* */
+            idEquipes:[],
+            equipes:[],
+            alert: null,
+            show: false
         }
-        this.getEtudiants('3A22');
+        this.getEtudiants();
         
     }
-    getEtudiants(classe){
-        return fetch("http://localhost:5000/users/"+classe)
+    getEtudiants(){
+        return fetch("http://localhost:4000/users/classe/tout")
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
                 }
                 return response.json();
               }).then(etudiant => {
-                  etudiant.map((prop,key) => this.state.membres.push({value:prop._id,label:prop.nom}));
+                  etudiant.map((prop,key) => this.state.classes.push({value:prop,label:prop}));
               })
               .catch(error => {
                 this.handleError(error);
               });
     }
-    handleEmailChange(event){
+    dangerAlert(title,motif){
         this.setState({
-            email: event.target.value
+            alert: (
+                <SweetAlert
+                    danger
+                    style={{display: "block",marginTop: "-100px"}}
+                    title={title}
+                    onConfirm={() => this.props.history.push("/forms/Listesujetsprojets")}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                >
+                    {motif}
+                </SweetAlert>
+            )
         });
-        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        re.test(event.target.value) === false ? this.setState({ emailError: (<small className="text-danger">Email is required and format should be <i>john@doe.com</i>.</small>) }):this.setState({ emailError: null });
     }
-    handlePasswordChange(event){
+    hideAlert(){
         this.setState({
-            password: event.target.value
+            alert: null
         });
-        event.target.value.length < 6 ? this.setState({ passwordError: (<small className="text-danger">You must enter a password of at least 6 characters.</small>) }):this.setState({ passwordError: null });
-    }
-    handleCfPasswordChange(event){
-        this.setState({
-            cfpassword: event.target.value
-        });
-        event.target.value !== this.state.password ? this.setState({ cfpasswordError: (<small className="text-danger">Passwords do not match.</small>) }):this.setState({ cfpasswordError: null });
-    }
-    handleRegisterSubmit(){
-        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        re.test(this.state.email) === false ? this.setState({ emailError: (<small className="text-danger">Email is required and format should be <i>john@doe.com</i>.</small>) }):this.setState({ emailError: null });
-        this.state.password.length < 6 ? this.setState({ passwordError: (<small className="text-danger">You must enter a password of at least 6 characters.</small>) }):this.setState({ passwordError: null });
-        this.state.cfpassword !== this.state.password ? this.setState({ cfpasswordError: (<small className="text-danger">Passwords do not match.</small>) }):this.setState({ cfpasswordError: null });
-    }
-    handleLoginEmail(event){
-        this.setState({
-            emailLogin: event.target.value
-        });
-        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        re.test(event.target.value) === false ? this.setState({ emailErrorLogin: (<small className="text-danger">Email is required and format should be <i>john@doe.com</i>.</small>) }):this.setState({ emailErrorLogin: null });
-    }
-    handleLoginPassword(event){
-        this.setState({
-            passwordLogin: event.target.value
-        });
-        event.target.value.length < 6 ? this.setState({ passwordErrorLogin: (<small className="text-danger">You must enter a password of at least 6 characters.</small>) }):this.setState({ passwordErrorLogin: null });
-    }
-    handleLoginSubmit(){
-        var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        re.test(this.state.emailLogin) === false ? this.setState({ emailErrorLogin: (<small className="text-danger">Email is required and format should be <i>john@doe.com</i>.</small>) }):this.setState({ emailErrorLogin: null });
-        this.state.passwordLogin < 6 ? this.setState({ passwordErrorLogin: (<small className="text-danger">You must enter a password of at least 6 characters.</small>) }):this.setState({ passwordErrorLogin: null });
     }
     handleResponseError(response) {
       throw new Error("HTTP error, status = " + response.status);
@@ -100,44 +83,14 @@ class AffectationChoixEquipe extends Component{
   handleError(error) {
       console.log(error.message);
   }
-    handleTypeValidation(e){
-        this.state.nomEquipe === "" ? this.setState({ nomEquipeError: (<small className="text-danger">Nom Equipe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
-        if(this.state.nomEquipeError==null){
-            e.preventDefault();
-            const idmembres=[];
-            this.state.multipleSelect.map((prop,key) => {
-                idmembres.push(prop.value);
-            })
-            return fetch("http://localhost:5000/equipes/add", {
-              method: "POST",
-              mode: "cors",
-              headers: {
-                    "Content-Type": "application/json"
-                },
-              body: JSON.stringify({ nomEquipe: this.state.nomEquipe,idMembre:idmembres })
-            })
-              .then(response => {
-               if (!response.ok) {
-                    this.handleResponseError(response);
-                }
-                return response.json();
-              })
-              .catch(error => {
-                this.handleError(error);
-              });
-        }
-        else{
-            e.preventDefault();
-        }
-    }
     async AffecterChoixEquipe(){
-        await fetch("http://localhost:5000/sujets/affecter/aleatoire", {   
+        await fetch("http://localhost:4000/sujets/affecter/aleatoire", {   
               method: "POST",
               mode: "cors",
               headers: {
                     "Content-Type": "application/json"
                 },
-              body: JSON.stringify({ listEquipes: "5e7e2af2b5e8642830f635db" })
+              body: JSON.stringify({ listEquipes: this.state.idEquipes }) 
             })
               .then(response => {
                if (!response.ok) {
@@ -147,40 +100,71 @@ class AffectationChoixEquipe extends Component{
                 console.log(response);
                 return response.json();
               }).then(equipe => {
-                  console.log(equipe);
-                  this.setState({equipes:equipe});
+                  if(equipe.erreurmsg){
+                      this.dangerAlert(equipe.erreurmsg,equipe.motif);
+                  }
+                  else{
+                      this.setState({equipes:equipe});
                   localStorage.setItem('equipes',JSON.stringify(this.state.equipes));
+                  this.props.history.push({pathname:"/tables/EquipesChoix",state:{equipes:this.state.equipes}});
+                  }
+                  
               })
               .catch(error => {
                 this.handleError(error);
               });
-              //console.log('ess'+localStorage.getItem('equipes'));
-        this.props.history.push({pathname:"/tables/ListeAleatoire",state:{equipes:this.state.equipes}});
+              //console.log('success'+localStorage.getItem('equipes'));
+        
+    }
+    checkTeams(classe){
+        this.state.idEquipes=[];
+        return fetch("http://localhost:4000/equipes/equipes/"+classe)
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                return response.json();
+              }).then(etudiant => {
+                  etudiant.map((prop,key) => {this.state.idEquipes.push(prop._id)});
+                  etudiant.map((prop,key) => this.state.count+=prop.membres.length);
+                  this.setState({equipes:etudiant});
+                  console.log(this.state.count);
+                  console.log(this.state.idEquipes);
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
     }
     render(){
         return (
             <div className="main-content">
+            {this.state.alert}
                 <Grid fluid>
                     <Row>
                         <Col md={12}>
                             <Form horizontal>
                                 <Card
                                     title={
-                                        <legend>Ajout equipe</legend>
+                                        <legend>Affecter Choix Sujets aux Equipes</legend>
                                     }
                                     content={
                                         <div>
-                                            <FormGroup controlId="formHorizontalRequiredText">
+                                            <FormGroup controlId="formHorizontalNumber">
                                                 <Col componentClass={ControlLabel} sm={2} smOffset={2}>
                                                     Classe
                                                 </Col>
                                                 <Col sm={6}>
-                                                    <FormControl type="text" name="nomEquipe" onChange={(event) => {
-                                                        this.setState({nomEquipe: event.target.value});
-                                                        event.target.value === "" ? this.setState({ nomEquipeError: (<small className="text-danger">classe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
-                                                    }}/>
-                                                    {this.state.nomEquipeError}
-                                                </Col>
+                                                <Select
+                                                    placeholder="Single Select"
+                                                    name="singleSelect"
+                                                    
+                                                    value={this.state.selectedClasse}
+                                                    options={this.state.classes}
+                                                    onChange={(value) => {this.setState({selectedClasse:value});
+                                                    console.log("f "+value.value);
+                                                        this.checkTeams(value.value);} }
+                                                />
+                                            </Col>
                                             </FormGroup>
                                         </div>
                                     }

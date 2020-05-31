@@ -111,9 +111,20 @@ router.route('/affecter/aleatoire').post(async function(req, res){
   var arraySujets=[];
   var arrayIndiceChoix=[];
   const arrayRestant=[];
+  var sujetDisponible=0;
   array=await getAllSujets(listeEquipes,res);
+  for(var i = 0; i< array[0]['choixSujet'].length; i++){
+    await Sujet.findById(array[i]['choixSujet'][i]).then(s => {
+      sujetDisponible+=s.nbrEquipeParProjet;
+    })
+  }
   var j=0;
   var breakLoop=false;
+  if(sujetDisponible<array.length){
+    res.json({erreurmsg:"Impossible d'affecter les sujets",motif:"le nombre des equipes est superieur au nombre de sujets à prendre."+
+      "Nombre d'equipes sans sujet : "+(array.length-sujetDisponible)});
+    return;
+  }
   while(!breakLoop){
   for (var i = 0; i < array.length; i++) {
   	var a = array[i]['choixSujet'][j];

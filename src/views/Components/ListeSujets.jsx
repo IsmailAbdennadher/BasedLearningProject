@@ -21,11 +21,6 @@ import SujetEdit from 'views/Forms/SujetEdit.jsx';
 
 
 class ListeSujets extends Component{
-    componentDidUpdate(e){
-        if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
-            this._reactInternalInstance._currentElement._owner._instance._reactInternalInstance._currentElement._owner._instance.componentDidUpdate(e);
-        }
-    }
     isMac(){
         let bool = false;
         if (navigator.platform.toUpperCase().indexOf('MAC') >= 0 || navigator.platform.toUpperCase().indexOf('IPAD') >= 0) {
@@ -38,7 +33,9 @@ class ListeSujets extends Component{
         this.state = {
             alert: null,
             show: false,
-            sujets:[]
+            sujets:[],
+            sujetsProjet:[],
+            topicsToAdd:[]
         }
         this.hideAlert = this.hideAlert.bind(this);
         this.successDelete = this.successDelete.bind(this);
@@ -53,7 +50,19 @@ class ListeSujets extends Component{
       console.log(error.message);
   }
     componentDidMount(){
-        return fetch("http://localhost:5000/sujets/")
+        fetch("http://localhost:4000/events/"+localStorage.projet)
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                return response.json();
+              }).then(projet => {
+                  this.setState({sujetsProjet:projet.projet.sujets});
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
+        return fetch("http://localhost:4000/sujets/")
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
@@ -74,7 +83,7 @@ class ListeSujets extends Component{
     }
     successDelete(id){
         console.log('id='+id);
-        fetch("http://localhost:5000/sujets/"+id, {
+        fetch("http://localhost:4000/sujets/"+id, {
               method: "DELETE",
               mode: "cors",
               headers: {
@@ -126,25 +135,60 @@ class ListeSujets extends Component{
             )
         });
     }
+    addTopicsProject(array){
+        fetch("http://localhost:4000/events/projets/"+localStorage.projet+"/addtopics", {
+              method: "POST",
+              mode: "cors",
+              headers: {
+                    "Content-Type": "application/json"
+                },
+              body: JSON.stringify({ topics: array })
+            })
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                console.log(response.json());
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
+              this.setState({
+            alert: (
+                <SweetAlert
+                    success
+                    style={{display: "block",marginTop: "-100px"}}
+                    title="Sujets ajoutés!"
+                    onConfirm={() => this.props.history.push('/forms/Listesujetsprojets')}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                >
+                    Les sujets ont été ajoutés au projet.
+                </SweetAlert>
+            )
+        });
+    }
+    addTopic(id){
+        this.state.topicsToAdd.push(id);
+        document.getElementById(id).className+=" hidden";
+    }
     render(){
 
         const defaultPanel = this.state.sujets.map((props,key) =>
             <PanelGroup id="accordion" ref="panels" onClick={() => this.forceUpdate()}>
-                <Panel
-                    collapsible
-                    header={
-                        <div>
-                            {props.titre}
-                            <b className="caret"></b>
-                        </div>
-                    }
-                    eventKey="1">
+                <Panel eventKey="1">
+                        <Panel.Heading>
+                          <Panel.Title toggle>{props.titre}</Panel.Title>
+                        </Panel.Heading>
+                        <Panel.Body collapsible>
                     <b>Type</b>: {props.type} <br />
                     <b>Description</b>: {props.description} <br/>
                     <b>Nombre d'equipe par projet</b>: {props.nbrEquipeParProjet} <br/>
-                    {props.accepte? <button className="btn-wd btn btn-success">Accepter sujet</button> : "" }
+                    {props.accepte? "" : <button className="btn-wd btn btn-success">Accepter sujet</button> }
+                    {this.state.sujetsProjet.includes(props)? "" : <button id={props._id} className="btn-wd btn btn-success" onClick={this.addTopic.bind(this,props._id)}>Ajouter au projet</button> }
                     <button className="btn-wd btn btn-default"><span className="btn-label"><i className="fa fa-edit"></i></span><Link to={"/edit/sujets/"+props._id}>Modifier sujet</Link></button>
                     <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessage.bind(this,props._id)}><span className="btn-label"><i className="fa fa-trash"></i></span>Supprimer sujet</button>
+                    </Panel.Body>
                 </Panel>
             </PanelGroup>
         );
@@ -299,7 +343,8 @@ class ListeSujets extends Component{
                                 category=""
                                 content={defaultPanel}
                             />
-                        </Col>
+                            <button className="btn-wd btn btn-success" onClick={this.addTopicsProject.bind(this,this.state.topicsToAdd)} disabled={this.state.topicsToAdd.length==0}>Ajouter les sujets au projet</button>
+                        </Col> 
                     </Row>
                 </Grid>
             </div>

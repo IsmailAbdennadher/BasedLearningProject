@@ -1,5 +1,5 @@
 const router = require('express').Router();
-let User = require('../models/user.model');
+let User = require('../models/user');
 
 router.route('/').get((req, res) => {
   User.find()
@@ -8,6 +8,18 @@ router.route('/').get((req, res) => {
 });
 router.route('/:classe').get((req, res) => {
   User.find({"classe":req.params.classe})
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/classe/tout').get((req, res) => {
+  User.distinct('classe')
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/classepar/:niveau').get((req, res) => {
+  User.find({classe: new RegExp('^'+req.params.niveau, "i")}).distinct('classe')
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
