@@ -1,95 +1,120 @@
+
 import React, { Component } from 'react';
+//import { Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import axios from "axios";
+//import 'react-big-scheduler/lib/css/style.css'
+import 'react-big-calendar/lib/css/react-big-calendar.css'
+import moment from 'moment'
+//import withDragDropContext from './test'
+import BigCalendar from 'react-big-calendar'
+
 import {
-    Grid, Row, Col
+  Modal, Button
 } from 'react-bootstrap';
-// react component used to create a calendar with events on it
-import BigCalendar from 'react-big-calendar';
-// dependency plugin for react-big-calendar
-import moment from 'moment';
-// react component used to create alerts
-import SweetAlert from 'react-bootstrap-sweetalert';
 
-import Card from 'components/Card/Card.jsx';
+const localizer = BigCalendar.momentLocalizer(moment);
 
-import { events } from 'variables/Variables.jsx';
+class Calendar extends Component {
+  state = {
+    evt: [],
+    modal: false,
+    selectedEvent: {},
+    startDate: new Date(),
+    endDate: new Date()
+  }
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+    this.onSelectEvent = this.onSelectEvent.bind(this);
+  }
+  onSelectEvent(event, e) {
+    this.setState(prevState => ({
+      modal: !prevState.modal,
+      selectedEvent: {
+        name: event.title,
+        description: event.description
+      },
+      startDate: event.start,
+      endDate: event.end
+    }));
+    console.log(event);
+  }
+  toggle() {
+    console.log('dkhlt')
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+  }
+  componentDidMount() {
 
-BigCalendar.setLocalizer(
-  BigCalendar.momentLocalizer(moment)
-);
-
-class Calendar extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            events: events,
-            alert: null
-        };
-        this.hideAlert = this.hideAlert.bind(this);
-    }
-    selectedEvent(event){
-        alert(event.title);
-    }
-    addNewEventAlert(slotInfo){
-        this.setState({
-            alert: (
-                <SweetAlert
-                    input
-                    showCancel
-                    style={{display: "block",marginTop: "-100px"}}
-                    title="Input something"
-                    onConfirm={(e) => this.addNewEvent(e,slotInfo)}
-                    onCancel={() => this.hideAlert()}
-                    confirmBtnBsStyle="info"
-                    cancelBtnBsStyle="danger"
-                />
-            )
+    const events = [];
+    axios.get("http://localhost:5000/liste").then(
+      result => {
+        let evts = result.data;
+        evts.forEach(element => {
+          let e = {
+            id: element._id,
+            title: element.nom,
+            description: element.description,
+            start: new Date(element.dateEvent),
+            end: new Date(element.dateEvent)
+          }
+          console.log(e)
+          events.push(e);
         });
-    }
-    addNewEvent(e,slotInfo){
-        console.log(e,slotInfo);
-        var newEvents = this.state.events;
-        newEvents.push({
-            'title': e,
-            'start':slotInfo.start,
-            'end':slotInfo.end
-        })
         this.setState({
-            alert: null,
-            events: newEvents
+          evt: events
         })
-    }
-    hideAlert(){
+      },
+      // Note: it's important to handle errors here
+      // instead of a catch() block so that we don't swallow
+      // exceptions from actual bugs in components.
+      error => {
         this.setState({
-            alert: null
+          isLoaded: true,
+          error
         });
-    }
-    render(){
-        return (
-            <div className="main-content">
-                {this.state.alert}
-                <Grid fluid>
-                    <Row>
-                        <Col md={10} mdOffset={1}>
-                                <Card
-                                    calendar
-                                    content={
-                                        <BigCalendar
-                                            selectable
-                                            events={this.state.events}
-                                            defaultView='month'
-                                            scrollToTime={new Date(1970, 1, 1, 6)}
-                                            defaultDate={new Date()}
-                                            onSelectEvent={event => this.selectedEvent(event)}
-                                            onSelectSlot={(slotInfo) => this.addNewEventAlert(slotInfo)}
-                                        />
-                                    }
-                                />
-                        </Col>
-                    </Row>
-                </Grid>
-            </div>
-        );
-    }
+      }
+    );
+    this.setState({
+      evt: events
+    })
+  }
+
+
+
+  render() {
+    return (
+      <div className="animated fadeIn">
+
+
+        <BigCalendar
+          localizer={localizer}
+          events={this.state.evt}
+          defaultView='week'
+          views={['month', 'week', 'day']}
+          defaultDate={new Date()}
+          onSelectEvent={this.onSelectEvent}
+        />
+        <Modal show={this.state.modal} onHide={this.toggle}>
+          <Modal.Header closeButton>
+            <Modal.Title>{this.state.selectedEvent.name}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            {this.state.selectedEvent.description}
+          </Modal.Body>
+          <Modal.Footer>
+            <Button onClick={() => { this.toggle() }}>
+              Close
+          </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>)
+
+
+  }
 }
 
-export default Calendar;
+
+//export default withDragDropContext(Calendar);
+export default (Calendar);

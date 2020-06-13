@@ -1,4 +1,7 @@
 import Dashboard from 'views/Dashboard/Dashboard.jsx';
+import Test from 'views/Dashboard/Test.jsx';
+import Test2 from 'views/Dashboard/Test2.jsx';
+
 import Buttons from 'views/Components/Buttons.jsx';
 import GridSystem from 'views/Components/GridSystem.jsx';
 import Panels from 'views/Components/Panels.jsx';
@@ -20,12 +23,20 @@ import Charts from 'views/Charts/Charts.jsx';
 import Calendar from 'views/Calendar/Calendar.jsx';
 import UserPage from 'views/Pages/UserPage.jsx';
 
+import EventForms from 'views/Forms/EventForms.jsx';
+import EventEdit from 'views/Forms/EventEdit.jsx';
+import listEvent from 'views/Tables/DataTables.jsx';
+import EventsForms from 'views/Forms/EventsForms.jsx';
+import ChatForms from 'views/Forms/ChatForms.jsx';
+
 import pagesRoutes from './pages.jsx';
 
 var pages = [{ path: "/pages/user-page", name: "User Page", mini: "UP", component: UserPage }].concat(pagesRoutes);
 
 var dashRoutes = [
     { path: "/dashboard", name: "Dashboard", icon: "pe-7s-graph", component: Dashboard },
+    { path: '/Test', name: "Test", icon: "pe-7s-graph", component: Test },
+    { path: '/pseudo/:pseudo', name:"Test2", icon: "pe-7s-graph", component:Test2 },
     { collapse: true, path: "/components", name: "Components", state: "openComponents", icon: "pe-7s-plugin", views:[
         { path: "/components/buttons", name: "Buttons", mini: "B", component: Buttons },
         { path: "/components/buttons", name: "Buttons", mini: "B", component: Buttons },
@@ -38,13 +49,19 @@ var dashRoutes = [
     },
     { collapse: true, path: "/forms", name: "Forms", state: "openForms", icon: "pe-7s-note2", views:
         [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
+        { path: "/forms/regular-forms", name: "Event Forms", mini: "EE", component: EventForms },
         { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms },
-        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms },
+   //     { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms }
+        { path: "/forms/validation-forms", name: "Events Forms", mini: "EJ", component: EventsForms },
+        { path: "/edit/event/:id", name: "Event Edit", mini: "ED", component: EventEdit},
+        { path: "/forms/ChatForms", name: "Chat Forms", mini: "CH", component: ChatForms },
+      
         { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard }]
     },
     { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
         [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
         { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
+       // { path: "/tables/data-tables", name: "listEvent", mini: "DT", component: listEvent }
         { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
     },
     { collapse: true, path: "/maps", name: "Maps", state: "openMaps", icon: "pe-7s-map-marker", views:

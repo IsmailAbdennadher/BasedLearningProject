@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios'
 // jQuery plugin - used for DataTables.net
 import $ from 'jquery';
 import {
@@ -6,7 +7,16 @@ import {
 } from 'react-bootstrap';
 
 import Card from 'components/Card/Card.jsx';
-
+import Button from 'elements/CustomButton/CustomButton.jsx';
+import SweetAlert from 'react-bootstrap-sweetalert';
+import {
+    Switch,
+    Route,
+    Redirect,
+    Link,
+    BrowserRouter as Router
+} from 'react-router-dom';
+import EventEdit from 'views/Forms/EventEdit.jsx';
 // DataTables.net plugin - creates a tables with actions on it
 require('datatables.net-responsive');
 $.DataTable = require('datatables.net-bs');
@@ -14,156 +24,236 @@ $.DataTable = require('datatables.net-bs');
 
 
 
-const dataTable = {
-    headerRow: [ 'Name', 'Position', 'Office', 'Age', 'Date', 'Actions' ],
-    footerRow: [ 'Name', 'Position', 'Office', 'Age', 'Date', 'Actions' ],
-    dataRows: [
-        ['Airi Satou', 'Andrew Mike', 'Develop', '2013', '99,225'],
-        ['Angelica Ramos', 'John Doe', 'Design', '2012', '89,241'],
-        ['Ashton Cox', 'Alex Mike', 'Design', '2010', '92,144'],
-        ['Bradley Greer','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Brenden Wagner', 'Paul Dickens', 'Communication', '2015', '69,201'],
-        ['Brielle Williamson','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Caesar Vance','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Cedric Kelly','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Charde Marshall','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Colleen Hurst','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Dai Rios', 'Andrew Mike', 'Develop', '2013', '99,225'],
-        ['Doris Wilder', 'John Doe', 'Design', '2012', '89,241'],
-        ['Fiona Green', 'Alex Mike', 'Design', '2010', '92,144'],
-        ['Garrett Winters','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Gavin Cortez', 'Paul Dickens', 'Communication', '2015', '69,201'],
-        ['Gavin Joyce','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Gloria Little','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Haley Kennedy','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Herrod Chandler','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Hope Fuentes','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Howard Hatfield', 'Andrew Mike', 'Develop', '2013', '99,225'],
-        ['Jena Gaines', 'John Doe', 'Design', '2012', '89,241'],
-        ['Jenette Caldwell', 'Alex Mike', 'Design', '2010', '92,144'],
-        ['Jennifer Chang','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Martena Mccray', 'Paul Dickens', 'Communication', '2015', '69,201'],
-        ['Michael Silva','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Michelle House','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Paul Byrd','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Prescott Bartlett','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Quinn Flynn','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Rhona Davidson', 'Andrew Mike', 'Develop', '2013', '99,225'],
-        ['Shou Itou', 'John Doe', 'Design', '2012', '89,241'],
-        ['Sonya Frost', 'Alex Mike', 'Design', '2010', '92,144'],
-        ['Suki Burks','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Tatyana Fitzpatrick', 'Paul Dickens', 'Communication', '2015', '69,201'],
-        ['Tiger Nixon','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Timothy Mooney','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Unity Butler','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Vivian Harrell','Mike Monday', 'Marketing', '2013', '49,990'],
-        ['Yuri Berry','Mike Monday', 'Marketing', '2013', '49,990']
-    ]
-};
+
 
 class DataTables extends Component{
-    componentDidMount() {
-        // $(this.refs.main).DataTable({
-        //     dom: '<"data-table-wrapper"t>',
-        //     data: this.props.names,
-        //     columns,
-        //     ordering: false
-        // });
-        $("#datatables").DataTable({
-            "pagingType": "full_numbers",
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            responsive: true,
-            language: {
-                search: "_INPUT_",
-                searchPlaceholder: "Search records",
+    constructor(props) {
+        super(props);
+        this.state = {
+            alert: null,
+            show: false,
+            posts:[]
+        }
+        this.hideAlert = this.hideAlert.bind(this);
+        this.res = this.res.bind(this);
+        this.warningWithConfirmMessage= this.warningWithConfirmMessage.bind(this);
+        this.warningWithConfirmMessageSupp= this.warningWithConfirmMessageSupp.bind(this);
+    }
+    componentDidMount(){
+        axios.get('http://localhost:5000/liste') 
+        .then(response => {
+            console.log(response)
+            this.setState({posts: response.data})
+
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    }
+    hideAlert(){
+        this.setState({
+            alert: null
+        });
+    } 
+    deleteEvents(id) {
+        axios.delete('http://localhost:5000/delete/'+ id)
+        .then((res) => {
+            console.log('Student successfully deleted!')
+        }).catch((error) => {
+            console.log(error)
+        })
+        this.setState({
+            alert: (
+                <SweetAlert
+                    success
+                    style={{display: "block",marginTop: "-100px"}}
+                    title="Supprimé!"
+                    onConfirm={() => window.location.reload()}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                >
+                    L evenement a été supprimé.
+                </SweetAlert>
+            )
+        });
+    }
+    warningWithConfirmMessageSupp(id){
+        this.setState({
+            alert: (
+                <SweetAlert
+                    warning
+                    style={{display: "block",marginTop: "-100px"}}
+                    title="Etes vous sûre?"
+                    onConfirm={() => this.deleteEvents(id)}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnText="Oui, Supprimer l evenement!"
+                    cancelBtnText="Annuler"
+                    showCancel
+                >
+                    Cette action est irréversible.
+                </SweetAlert>
+            )
+        });
+    }
+    res(id,nombrePlace) {
+        var a ={
+            "_id":"5edf7be2de87b852043c826d"
+      
+        }
+        console.log('aziz')
+   
+     console.log(nombrePlace)
+     console.log('aziz')
+   if(nombrePlace==0){
+   
+        this.setState({
+            alert: (
+                <SweetAlert
+                    style={{display: "block",marginTop: "-100px"}}
+                    title="il n'existe plus des place pour cet evenement"
+                    onConfirm={() => this.hideAlert()}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                />
+            )
+        });
+    
+   }else{
+    axios.post('http://localhost:5000/part/'+id,a)
+        .then((res) => {
+            console.log('aaaaaaaaaaaaaaaaaaaaa')
+            console.log(res.data)
+            
+            if (res.data==1){
+                this.setState({
+                    alert: (
+                        <SweetAlert
+                            success
+                            style={{display: "block",marginTop: "-100px"}}
+                            title="Oups!"
+                            onConfirm={() => window.location.reload()}
+                            onCancel={() => this.hideAlert()}
+                            confirmBtnBsStyle="info"
+                        >
+vous avez deja effectué une reservation                       
+                        </SweetAlert>
+                    )
+                });
+               
             }
+            if(res.data==0){
+                this.setState({
+                    alert: (
+                        <SweetAlert
+                            success
+                            style={{display: "block",marginTop: "-100px"}}
+                            title="Réserve!"
+                            onConfirm={() => window.location.reload()}
+                            onCancel={() => this.hideAlert()}
+                            confirmBtnBsStyle="info"
+                        >
+                            L evenement a été reserver.
+                        </SweetAlert>
+                    )
+                });
+                axios.get('http://localhost:5000/res/'+id)
+                .then((res) => {
+                    console.log('Student successfully deleted!')
+                }).catch((error) => {
+                    console.log(error)
+                })
+            }
+            console.log('aaaaaaaaaaaaaaaaaaaaa')
+        }).catch((error) => {
+            console.log(error)
+        })
+        
+   }
+       
+        
+
+    }
+    warningWithConfirmMessage(id,nombrePlace){
+        this.setState({
+            alert: (
+                <SweetAlert
+                    warning
+                    style={{display: "block",marginTop: "-100px"}}
+                    title="Etes vous sûre?"
+                    onConfirm={() => this.res(id,nombrePlace)}
+                    onCancel={() => this.hideAlert()}
+                    confirmBtnBsStyle="info"
+                    cancelBtnBsStyle="danger"
+                    confirmBtnText="Oui, reserver l evenement!"
+                    cancelBtnText="Annuler"
+                    showCancel
+                >
+                    Cette action est irréversible.
+                </SweetAlert>
+            )
         });
-        var table = $('#datatables').DataTable();
-
-        // Edit record
-        table.on( 'click', '.edit', function () {
-            var $tr = $(this).closest('tr');
-
-            var data = table.row($tr).data();
-            alert( 'You press on Row: ' + data[0] + ' ' + data[1] + ' ' + data[2] + '\'s row.' );
-        } );
-
-        // Delete a record
-        table.on( 'click', '.remove', function (e) {
-            var $tr = $(this).closest('tr');
-            table.row($tr).remove().draw();
-            e.preventDefault();
-        } );
-
-        //Like record
-        table.on( 'click', '.like', function () {
-            alert('You clicked on Like button');
-        });
     }
-    componentWillUnmount(){
-        $('.data-table-wrapper')
-        .find('table')
-        .DataTable()
-        .destroy(true);
-    }
-    shouldComponentUpdate() {
-        return false;
-    }
+    
     render() {
+        const { posts }= this.state
         return (
             <div className="main-content">
+                 {this.state.alert}
                 <Grid fluid>
                     <Row>
                         <Col md={12}>
-                            <h4 className="title">DataTables.net</h4>
-                            <p className="category">A powerful jQuery plugin handcrafted by our friends from <a href="https://datatables.net/" target="_blank" rel="noopener noreferrer">dataTables.net</a>. It is a highly flexible tool, based upon the foundations of progressive enhancement and will add advanced interaction controls to any HTML table. Please check out the <a href="https://datatables.net/manual/index" target="_blank" rel="noopener noreferrer">full documentation.</a></p>
+                            <h4 className="title">liste des evenements</h4>
+                            
                             <Card
-                                title="DataTables.net"
+                                title="EVENEMENTS"
                                 content={
                                     <div className="fresh-datatables">
                                         <table id="datatables" ref="main" className="table table-striped table-no-bordered table-hover" cellSpacing="0" width="100%" style={{width:"100%"}}>
+                                           
                                             <thead>
                                                 <tr>
-                                                    <th>{ dataTable.headerRow[0] }</th>
-                                                    <th>{ dataTable.headerRow[1] }</th>
-                                                    <th>{ dataTable.headerRow[2] }</th>
-                                                    <th>{ dataTable.headerRow[3] }</th>
-                                                    <th>{ dataTable.headerRow[4] }</th>
-                                                    <th className="disabled-sorting text-right">{ dataTable.headerRow[5] }</th>
+                                                <th>Nom Event</th>
+                                                <th>TYPE EVENT</th>
+                                                <th>DATE EVENT</th>
+                                                <th>NOMBRE DE PLACE</th>
+                                                <th>DESCRIPTION</th>
+		                                        <th>LIEU</th>
+                                                <th>IMAGE</th>
+		                                      	<th>CATEGORIE</th>
+                                                 
                                                 </tr>
                                             </thead>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>{ dataTable.footerRow[0] }</th>
-                                                    <th>{ dataTable.footerRow[1] }</th>
-                                                    <th>{ dataTable.footerRow[2] }</th>
-                                                    <th>{ dataTable.footerRow[3] }</th>
-                                                    <th>{ dataTable.footerRow[4] }</th>
-                                                    <th className="text-right">{ dataTable.footerRow[5] }</th>
-                                                </tr>
-                                            </tfoot>
-                                            <tbody>
-                                                {
-                                                    dataTable.dataRows.map((prop,key) => {
-                                                        return (
-                                                            <tr key={key}>
-                                                                {
-                                                                    prop.map((prop,key)=> {
-                                                                        return (
-                                                                            <td  key={key}>{prop}</td>
-                                                                        );
-                                                                    })
-                                                                }
-                                                                <td className="text-right">
-                                                                    <a className="btn btn-simple btn-info btn-icon like"><i className="fa fa-heart"></i></a>
-                                                                    <a className="btn btn-simple btn-warning btn-icon edit"><i className="fa fa-edit"></i></a>
-                                                                    <a className="btn btn-simple btn-danger btn-icon remove"><i className="fa fa-times"></i></a>
+                             <tbody>              
+                                            {posts.map((p, i) => {
+            //const splitPath = p.posts.split("\\");
+           // const path = splitPath[splitPath.length - 1];
+            return (
+              <tr key={i}>
+                <td>{p.nom}</td>
+                <td>{p.type}</td>
+				 <td>{p.dateEvent}</td>
+				  <td>{p.nombrePlace}</td>
+				    <td>{p.description}</td>
+					 <td>{p.lieu}</td>
+                      <td>{p.image}</td>
+					 <td>{p.categorie}</td>
+                <td>
+                </td>
+                <td>
+                </td> 
+                <td >
+                                                      
+                <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessageSupp.bind(this,p._id)}><span className="btn-label"><i className="fa fa-trash"></i></span>supprimer</button>
+                <button className="btn-wd btn btn-default"><span className="btn-label"><i className="fa fa-edit"></i></span><Link to={"/edit/event/"+p._id}>Modifier </Link></button>
+                <button className="btn-wd btn btn-danger" onClick={this.warningWithConfirmMessage.bind(this,p._id,p.nombrePlace)}><span className="btn-label"><i className="fa fa-trash"></i></span>reserver</button>
+                                                                
                                                                 </td>
-                                                            </tr>
-                                                        )
-                                                    })
-                                                }
-                                            </tbody>
+              </tr>
+            );
+          })}
+        </tbody>
                                         </table>
                                     </div>
                                 }
