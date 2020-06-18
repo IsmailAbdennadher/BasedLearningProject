@@ -29,7 +29,7 @@ class SujetForms extends Component{
             descriptionError: null,
             alert: null,
             show: false,
-            selectOptions:[{value:'web-plateforme',label:'web-plateforme'},{value:'app mobile',label:'app mobile'},{value:'pi-Bi',label:'pi-Bi'}
+            selectOptions:[{value:'finance',label:'finance'},{value:'erp',label:'erp'},{value:'pi-Bi',label:'pi-Bi'}
             ],
         }
         this.state.type=this.state.selectOptions[0];
@@ -65,7 +65,7 @@ class SujetForms extends Component{
         this.state.nomEquipe === "" ? this.setState({ nomEquipeError: (<small className="text-danger">Nom Equipe est obligatoire.</small>) }):this.setState({ nomEquipeError: null });
         if(descriptionRex.test(this.state.description)&&titreRex.test(this.state.titre)&&digitRex.test(this.state.nbrEquipeParProjet)){
             e.preventDefault();
-            return fetch("http://localhost:5000/sujets/add", {
+            return fetch("http://localhost:4000/sujets/add", {
               method: "POST",
               mode: "cors",
               headers: {

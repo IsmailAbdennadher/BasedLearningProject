@@ -204,7 +204,10 @@ router.route('/permute').post((req, res) => {
       for(var x of req.body.valeur1){
         equipe.membres.splice(equipe.membres.indexOf(x),1);
       }
-      equipe.membres.push(req.body.valeur2);
+      for(var l of req.body.valeur2){
+        equipe.membres.push(l);
+      }
+      
       //equipe.description = req.body.description;
       result.push(equipe);
       equipe.save()
@@ -215,7 +218,10 @@ router.route('/permute').post((req, res) => {
       for(var y of req.body.valeur2){
         equipe.membres.splice(equipe.membres.indexOf(y),1);
       }
-      equipe.membres.push(req.body.valeur1);
+      for(var z of req.body.valeur1){
+        equipe.membres.push(z);
+      }
+      
       result.push(equipe);
       //equipe.description = req.body.description;
 
@@ -244,7 +250,15 @@ router.route('/update/:id').post((req, res) => {
 router.route('/equipes/:classe').get((req, res) => {
 
   Equipe.find().populate('choixSujet').populate('membres',null,{classe: req.params.classe}).populate('sujet')
-    .then(equipe => res.json(equipe))
+    .then(equipe => {
+      for(var i=0;i<equipe.length;i++){
+      if(equipe[i].membres.length==0){
+        equipe.splice(i,1);
+        i--;
+      }
+    }
+    res.json(equipe);
+    })
     .catch(err => res.status(400).json('Error: ' + err));
 });
 

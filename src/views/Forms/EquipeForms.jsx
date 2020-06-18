@@ -29,7 +29,7 @@ class EquipeForms extends Component{
         
     }
     getEtudiants(classe){
-        return fetch("http://localhost:5000/users/"+classe)
+        return fetch("http://localhost:4000/users/"+classe)
               .then(response => {
                if (!response.ok) {
                     this.handleResponseError(response);
@@ -99,7 +99,7 @@ class EquipeForms extends Component{
             this.state.multipleSelect.map((prop,key) => {
                 idmembres.push(prop.value);
             })
-            return fetch("http://localhost:5000/equipes/add", {
+            return fetch("http://localhost:4000/equipes/add", {
               method: "POST",
               mode: "cors",
               headers: {
@@ -111,6 +111,7 @@ class EquipeForms extends Component{
                if (!response.ok) {
                     this.handleResponseError(response);
                 }
+                alert('equipe ajouté!');
                 return response.json();
               })
               .catch(error => {

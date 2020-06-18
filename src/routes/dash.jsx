@@ -102,7 +102,7 @@ var dashRoutes = [
         { path: "/lin", name: "LinkedInPage", mini: "LI", component: LinkedInPage },
         { path: "/group", name: "Group", mini: "G", component: GroupLayout }]
     },
-    { collapse: true, path: "/forms", name: "Forms", state: "openForms", icon: "pe-7s-note2", views:
+    { collapse: true, path: "/forms", name: "Projet", state: "openForms", icon: "pe-7s-note2", views:
         [{ path: "/forms/projet", name: "Ajouter Projet", mini: "AP", component: ProjetForms,invisible:!(role_admin||role_coordinateur) },
         { path: "/forms/Listeprojets", name: "Liste Projets", mini: "LP", component: ListeProjets,invisible:!(role_admin||role_coordinateur) },
         { path: "/edit/projets/:id", name: "Modifer Sujet", mini: "AS", component: ProjetEdit , invisible:true },
@@ -112,11 +112,11 @@ var dashRoutes = [
         { path: "/forms/Listesujets", name: "Liste Sujets", mini: "LS", component: ListeSujets,invisible:!((role_admin||role_coordinateur)&&localStorage.projet) },
         { path: "/forms/Listesujetsprojets", name: "Sujets du Projet", mini: "SP", component: ListeSujetsProjets,invisible:!((role_admin||role_coordinateur)&&localStorage.projet) },
         { path: "/edit/sujets/:id", name: "Modifer Sujet", mini: "AS", component: SujetEdit , invisible:true },
-        { path: "/ChoixEquipeSujets", name: "Choix Equipe Sujets", mini: "AS", component: ChoixEquipeSujets,invisible:!((role_admin||role_coordinateur)&&localStorage.projet) },
+        { path: "/ChoixEquipeSujets", name: "Choix Equipe Sujets", mini: "AS", component: ChoixEquipeSujets,invisible:!((role_apprenant)&&localStorage.projet) },
         { path: "/AffectationChoixEquipe", name: "Affecter Sujets Aléa", mini: "AS", component: AffectationChoixEquipe,invisible:!((role_admin||role_coordinateur)&&localStorage.projet) },
-        { path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
-        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms },
-        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms },
+        { path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms,invisible:true },
+        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms,invisible:true },
+        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms,invisible:true },
         { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, invisible:true }]
     },
     { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
@@ -124,9 +124,9 @@ var dashRoutes = [
         { path: "/tables/EquipesChoix", name: "Sujets Equipes", mini: "SE", component: EquipesChoixTable, invisible:true },
         { path: "/tables/ListeAleatoire", name: "Liste aleatoire", mini: "LA", component: GetFormationEquipe, invisible:!((role_admin||role_coordinateur)&&localStorage.projet) },
         { path: "/tables/ListeEquipes", name: "Liste aleatoire", mini: "LA", component: EquipesAleatoire, invisible:true },
-        { path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
-        { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
-        { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
+        { path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables,invisible:true },
+        { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables,invisible:true },
+        { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables,invisible:true }]
     },
     { collapse: true, path: "/maps", name: "Maps", state: "openMaps", icon: "pe-7s-map-marker", views:
         [{ path: "/maps/google-maps", name: "Google Maps", mini: "GM", component: GoogleMaps },

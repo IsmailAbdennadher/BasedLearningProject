@@ -232,6 +232,7 @@ class EquipesAleatoire extends Component{
                     <Row>
                         <Col md={9}>
                         {this.state.equipes.map((props,key) => {
+                            if(props.membres.length>0){
                             return (
                             <Card
                                 title={props.nomEquipe}
@@ -245,20 +246,17 @@ class EquipesAleatoire extends Component{
                                                 <th className="text-left">#</th>
                                                 <th>Nom</th>
                                                 <th>Classe</th>
-                                                <th className="text-right">Salary</th>
                                                 <th className="text-right action" hidden>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         {props.membres.map((prop,keys) => {
-                                            console.log('jawek fes fes');
 
                                             return(
                                             <tr key={keys}>
                                                 <td className="text-left">{keys+1}</td>
-                                                <td>{prop.nom}</td>
+                                                <td>{prop.nom } {prop.prenom? prop.prenom:""}</td>
                                                 <td>{prop.classe}</td>
-                                                <td className="text-right">€ 99,225</td>
                                                 <td className="text-right action" hidden>
                                                     <Checkbox
                                                         isChecked={false}
@@ -290,6 +288,7 @@ class EquipesAleatoire extends Component{
                                 }
                             />
                             );
+                        }
                             })}
                        <Button id="btnPermute" onClick={this.fairePermutation.bind(this)}>Effectuer des permutations</Button>
                        

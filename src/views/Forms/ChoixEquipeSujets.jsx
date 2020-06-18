@@ -35,6 +35,7 @@ class ChoixEquipeSujets extends Component{
             resultOptions:[]
         }
         this.getTopics();
+        this.getEquipeId();
 
     }
     getTopics(){
@@ -62,7 +63,7 @@ class ChoixEquipeSujets extends Component{
                 }
                 return response.json();
               }).then(equipe => {
-                  this.setState({equipe_id:equipe._id});
+                  this.setState({equipe_id:equipe[0]._id});
 
               })
               .catch(error => {
@@ -76,7 +77,7 @@ class ChoixEquipeSujets extends Component{
                     success
                     style={{display: "block",marginTop: "-100px"}}
                     title="Choix Sujets ajouté!"
-                    onConfirm={() => console.log('Done!')}
+                    onConfirm={() => this.hideAlert()}
                     onCancel={() => this.hideAlert()}
                     confirmBtnBsStyle="info"
                 >
@@ -143,8 +144,7 @@ class ChoixEquipeSujets extends Component{
 
       test(e){
           e.preventDefault();
-          var x=document.getElementsByName('singleSelect');
-          console.log('default length='+this.state.selectOptionsDefault.length);
+          const x=document.getElementsByName('singleSelect');
           if(x.length < this.state.selectOptionsDefault.length)
               {alert('Veuillez remplir toutes les cases');
                  return;}

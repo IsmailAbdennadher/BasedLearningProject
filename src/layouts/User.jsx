@@ -48,11 +48,37 @@ class UserProfile extends Component {
            user:[],
             competence:[],
             hasError: false
-
-
         };
+        this.getProject();
     }
-
+    getProject(){
+        if(jwt_decode(localStorage.token).user.role[0].nom==="apprenant"){
+            var str = jwt_decode(localStorage.token).user.classe;
+      var patt = /[0-9]+\b/;
+      var result = str.match(patt);
+      var niveau = str.replace(result,"");
+      return fetch("http://localhost:4000/events/projet/"+niveau)
+              .then(response => {
+               if (!response.ok) {
+                    this.handleResponseError(response);
+                }
+                return response.json();
+              })
+              .then(projet => {
+                  localStorage.setItem('projet',projet._id);
+                  localStorage.setItem('projet-nom',projet.projet.nom);
+              })
+              .catch(error => {
+                this.handleError(error);
+              });
+        }
+    }
+    handleResponseError(response) {
+      throw new Error("HTTP error, status = " + response.status);
+  }
+  handleError(error) {
+      console.log(error.message);
+  }
     componentWillMount() {
 console.log(localStorage)
       if (localStorage.token === undefined)

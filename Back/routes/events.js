@@ -13,6 +13,12 @@ router.route('/projets').get((req, res) => {
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
+router.route('/projet/:classe').get((req, res) => {
+  Event.findOne({ 'projet.niveau_concerne':req.params.classe })
+    .then(users => res.json(users))
+    .catch(err => res.status(400).json('Error: ' + err));
+});
+
 router.route('/:id').get((req, res) => {
   Event.findById(req.params.id).populate('projet.sujets')
     .then(users => res.json(users))

@@ -120,7 +120,7 @@ class FormationEquipe extends Component{
                       console.log(equipe);
                   this.setState({equipes:equipe});
                   localStorage.setItem('equipes',JSON.stringify(this.state.equipes));
-                  this.props.history.push({pathname:"/tables/ListeAleatoire",state:{equipes:this.state.equipes}});
+                  this.props.history.push({pathname:"/tables/ListeEquipes",state:{equipes:this.state.equipes}});
                   }
               })
               .catch(error => {

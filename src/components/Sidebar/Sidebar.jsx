@@ -56,6 +56,7 @@ class Sidebar extends Component{
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
             setTimeout(() => { Ps.update(this.refs.sidebarWrapper) }, 350);
         }
+        
     }
     // function that creates perfect scroll bar for windows users (it creates a scrollbar that looks like the one from apple devices)
     isMac(){
@@ -95,7 +96,7 @@ class Sidebar extends Component{
                                 <span>
                                     {this.state.user.nom+" "+this.state.user.prenom}
                                     <br/>
-                                    {localStorage.projet &&
+                                    {localStorage.projet && this.state.user.nom!=="Etudiant" &&
                                         <Fragment>
                                     <small><b>en train de gérer projet:</b></small><br/>
                                     <div className="text-center"><small>{localStorage.getItem('projet-nom')}</small></div>
