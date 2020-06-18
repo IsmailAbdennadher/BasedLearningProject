@@ -4,19 +4,19 @@ import {
     Form, FormGroup, FormControl, ControlLabel
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 import jwt_decode from "jwt-decode";
 
-import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Checkbox from '../../elements/CustomCheckbox/CustomCheckbox.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 import Select from 'react-select';
 import Datetime from 'react-datetime';
 import 'react-select/dist/react-select.css';
 import{
     anneeScolaire
-} from 'variables/Variables.jsx';
+} from '../../variables/Variables.jsx';
 
 class ProjetForms extends Component{
     constructor(props){

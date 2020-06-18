@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // react component used to create charts
 import SweetAlert from 'react-bootstrap-sweetalert';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../../elements/CustomButton/CustomButton.jsx';
 
 class Step3 extends Component{
     constructor(props){

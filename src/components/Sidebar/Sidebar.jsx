@@ -3,18 +3,18 @@ import { Collapse } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 // this is used to create scrollbars on windows devices like the ones from apple devices
 import * as Ps from 'perfect-scrollbar';
-import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
+//import '../perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 
-import HeaderLinks from 'components/Header/HeaderLinks.jsx';
+import HeaderLinks from '../../components/Header/HeaderLinks.jsx';
 
 // backgroundImage for Sidebar
-import image from 'assets/img/full-screen-image-3.jpg';
+import image from '../../assets/img/full-screen-image-3.jpg';
 // image for avatar in Sidebar
-import avatar from 'assets/img/default-avatar.png';
+import avatar from '../../assets/img/default-avatar.png';
 // logo for sidebar
-import logo from "logo.svg";
+import logo from "../../logo.svg";
 
-import dashRoutes from 'routes/dash.jsx';
+import dashRoutes from '../../routes/dash.jsx';
 
 import jwt_decode from "jwt-decode";
 
@@ -56,7 +56,7 @@ class Sidebar extends Component{
         if (window.matchMedia(`(min-width: 960px)`).matches && !this.isMac()) {
             setTimeout(() => { Ps.update(this.refs.sidebarWrapper) }, 350);
         }
-        
+
     }
     // function that creates perfect scroll bar for windows users (it creates a scrollbar that looks like the one from apple devices)
     isMac(){

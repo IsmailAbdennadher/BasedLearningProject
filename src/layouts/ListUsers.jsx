@@ -2,14 +2,14 @@ import React, { Component,Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import axios from "axios";
-import {Alert, Modal, FormGroup, ControlLabel, HelpBlock, Radio, Grid, Table} from 'react-bootstrap'
-import Header from "./Header"
-import { Multiselect } from 'react-widgets'
-import Sidebar from "components/Sidebar/Sidebar";
+import {Alert, Modal, FormGroup, ControlLabel, HelpBlock, Radio, Grid, Table} from 'react-bootstrap';
+import Header from "./Header.jsx";
+import { Multiselect } from 'react-widgets';
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 //import routes from "routes.js"
 import jwt_decode from "jwt-decode";
 //import WarningIcon from '@material-ui/icons/Warning';
-import TableList from "./TableList";
+import TableList from "./TableList.jsx";
 
 class ListUsers extends Component {
 

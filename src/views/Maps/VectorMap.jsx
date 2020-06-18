@@ -12,7 +12,7 @@ import {
 // function that returns a color based on an interval of numbers
 import { scaleLinear } from "d3-scale";
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 const colorScale = scaleLinear()
     .domain([0, 1, 50, 100])

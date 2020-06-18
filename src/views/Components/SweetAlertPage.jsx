@@ -3,16 +3,16 @@ import { Grid, Row, Col } from 'react-bootstrap';
 // react component used to create charts
 import SweetAlert from 'react-bootstrap-sweetalert';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
 import{
     selectOptions
-} from 'variables/Variables.jsx';
+} from '../../variables/Variables.jsx';
 
 class SweetAlertPage extends Component{
     constructor(props){

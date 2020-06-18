@@ -4,7 +4,7 @@ import {
     Form, FormGroup, FormControl, ControlLabel
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 import {
     Switch,
@@ -18,8 +18,8 @@ import {
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Checkbox from '../../elements/CustomCheckbox/CustomCheckbox.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
 class GetSujetsEquipe extends Component{
     constructor(props){

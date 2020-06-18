@@ -8,15 +8,15 @@ import {
 // react component that creates a switch button that changes from on to off mode
 import Switch from 'react-bootstrap-switch';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
-import img1 from 'assets/img/blog-1.jpg';
-import img2 from 'assets/img/blog-2.jpg';
-import img3 from 'assets/img/blog-3.jpg';
-import img4 from 'assets/img/blog-4.jpg';
-import img5 from 'assets/img/blog-5.jpg';
+import img1 from '../../assets/img/blog-1.jpg';
+import img2 from '../../assets/img/blog-2.jpg';
+import img3 from '../../assets/img/blog-3.jpg';
+import img4 from '../../assets/img/blog-4.jpg';
+import img5 from '../../assets/img/blog-5.jpg';
 
 class ExtendedTables extends Component{
     render(){

@@ -3,9 +3,9 @@ import {
     FormGroup, FormControl
 } from 'react-bootstrap';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
-import avatar from 'assets/img/default-avatar.png';
+import avatar from '../../assets/img/default-avatar.png';
 
 class LockScreenPage extends Component{
     render(){

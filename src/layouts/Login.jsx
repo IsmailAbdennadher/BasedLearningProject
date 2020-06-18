@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBody, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import axios from "axios";
-import {Alert} from 'react-bootstrap'
+import {Alert} from 'react-bootstrap';
 
 
 class Login2 extends Component {

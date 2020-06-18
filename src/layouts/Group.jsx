@@ -1,8 +1,8 @@
 import React, { Component,Fragment } from 'react';
 import axios from "axios";
-import {Alert, Table, Label, FormControl, FormGroup, ControlLabel} from 'react-bootstrap'
-import Header from "./Header"
-import Sidebar from "components/Sidebar/Sidebar";
+import {Alert, Table, Label, FormControl, FormGroup, ControlLabel} from 'react-bootstrap';
+import Header from "./Header.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 //import routes from "routes.js"
 import jwt_decode from "jwt-decode";
 import {Multiselect} from "react-widgets";

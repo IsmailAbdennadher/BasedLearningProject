@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 
 // dinamically create app routes
-import appRoutes from 'routes/app.jsx';
+import appRoutes from '../../routes/app.jsx';
 
 class App extends Component{
     componentDidUpdate(e){

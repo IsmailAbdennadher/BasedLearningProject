@@ -5,9 +5,9 @@ import {
     Grid, Row, Col
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
 
 class Notifications extends Component {

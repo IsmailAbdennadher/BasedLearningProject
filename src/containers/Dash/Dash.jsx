@@ -10,15 +10,15 @@ import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 // react component that creates notifications (like some alerts with messages)
 import NotificationSystem from 'react-notification-system';
 
-import Sidebar from 'components/Sidebar/Sidebar.jsx';
-import Header from 'components/Header/Header.jsx';
-import Footer from 'components/Footer/Footer.jsx';
+import Sidebar from '../../components/Sidebar/Sidebar.jsx';
+import Header from '../../components/Header/Header.jsx';
+import Footer from '../../components/Footer/Footer.jsx';
 
 // dinamically create dashboard routes
-import dashRoutes from 'routes/dash.jsx';
+import dashRoutes from '../../routes/dash.jsx';
 
 // style for notifications
-import { style } from "variables/Variables.jsx";
+import { style } from "../../variables/Variables.jsx";
 
 class Dash extends Component{
     constructor(props){

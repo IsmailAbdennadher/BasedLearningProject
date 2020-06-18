@@ -9,7 +9,7 @@ import 'react-select/dist/react-select.css';
 
 import{
     selectOptions
-} from 'variables/Variables.jsx';
+} from '../../../variables/Variables.jsx';
 
 class Step2 extends React.Component{
     constructor(props){

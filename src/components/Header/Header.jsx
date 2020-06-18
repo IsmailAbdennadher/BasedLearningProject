@@ -7,7 +7,7 @@ import HeaderLinks from './HeaderLinks.jsx'
 
 // we import here the routes for dashboard pages (links that appear in sidebar) to set navbar's name
 
-import dashRoutes from 'routes/dash.jsx';
+import dashRoutes from '../../routes/dash.jsx';
 
 class Header extends Component{
     constructor(props){

@@ -18,11 +18,11 @@ import wNumb from 'wnumb';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 import{
     selectOptions
-} from 'variables/Variables.jsx';
+} from '../../variables/Variables.jsx';
 
 class ExtendedForms extends Component{
     constructor(props){

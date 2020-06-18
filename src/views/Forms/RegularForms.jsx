@@ -4,11 +4,11 @@ import{
     FormGroup, ControlLabel, FormControl, HelpBlock, Form, InputGroup
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
-import Button from 'elements/CustomButton/CustomButton.jsx';
-import Radio from 'elements/CustomRadio/CustomRadio.jsx';
+import Checkbox from '../../elements/CustomCheckbox/CustomCheckbox.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
+import Radio from '../../elements/CustomRadio/CustomRadio.jsx';
 
 class RegularForms extends Component{
     constructor(props){

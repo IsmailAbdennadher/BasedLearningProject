@@ -13,7 +13,7 @@ import {
     BrowserRouter as Router
 } from 'react-router-dom';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 

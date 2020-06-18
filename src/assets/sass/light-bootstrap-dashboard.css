@@ -6384,7 +6384,7 @@ form label.radio, form label.checkbox {
   .navbar .btn-simple {
     font-size: 16px; }
   .navbar.fixed {
-    width: calc(100% - $sidebar-width);
+    width: calc(100% - calc(100% - 260px));
     right: 0;
     left: auto;
     border-radius: 0; }

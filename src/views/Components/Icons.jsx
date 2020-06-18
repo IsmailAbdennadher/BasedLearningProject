@@ -3,8 +3,8 @@ import {
     Grid, Col, Row
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card';
-import { iconsArray } from 'variables/Variables.jsx';
+import Card from '../../components/Card/Card.jsx';
+import { iconsArray } from '../../variables/Variables.jsx';
 import {
     faWeb,
     faHand,
@@ -21,7 +21,7 @@ import {
     faVideo,
     faBrand,
     faMedical
-} from 'variables/faVariables.jsx';
+} from '../../variables/faVariables.jsx';
 
 class Icons extends Component {
     faMap(faToMap){

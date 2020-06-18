@@ -5,9 +5,9 @@ import {
     FormControl, FormGroup
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
 class RegisterPage extends Component{
     render(){

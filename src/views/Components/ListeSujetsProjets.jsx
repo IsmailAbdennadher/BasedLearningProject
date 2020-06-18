@@ -13,11 +13,11 @@ import {
     BrowserRouter as Router
 } from 'react-router-dom';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 import SweetAlert from 'react-bootstrap-sweetalert';
 
-import SujetEdit from 'views/Forms/SujetEdit.jsx';
+import SujetEdit from '../../views/Forms/SujetEdit.jsx';
 
 
 class ListeSujetsProjets extends Component{

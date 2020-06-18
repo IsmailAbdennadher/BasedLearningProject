@@ -5,7 +5,7 @@ import {
 // react components used to create a google map
 import { Map, Marker, GoogleApiWrapper } from 'google-maps-react';
 
-import MapCard from 'components/Card/MapCard.jsx';
+import MapCard from '../../components/Card/MapCard.jsx';
 
 class GoogleMaps extends Component{
     render(){

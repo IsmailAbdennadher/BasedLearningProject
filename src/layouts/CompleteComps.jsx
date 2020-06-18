@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { Button, Card, CardBody, CardGroup, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import axios from "axios";
 import {Alert, FormControl, FormGroup, ControlLabel, HelpBlock, Radio, Table} from 'react-bootstrap';
-import Header from "./Header";
+import Header from "./Header.jsx";
 import { Multiselect } from 'react-widgets';
 import Slider from 'react-input-slider';
-import Sidebar from "components/Sidebar/Sidebar";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
 //import routes from "routes.js"
 import jwt_decode from "jwt-decode";
 import {logicalExpression} from "@babel/types";

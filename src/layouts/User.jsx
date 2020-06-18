@@ -33,10 +33,10 @@ import Panel from 'react-bootstrap/lib/Panel';
 import jwt_decode from "jwt-decode";
 //import WarningIcon from '@material-ui/icons/Warning';
 
-import { UserCard } from "components/Card/UserCard.jsx";
-import Sidebar from "components/Sidebar/Sidebar";
-import Button from "elements/CustomButton/CustomButton.jsx";
-import avatar from "assets/img/faces/face-3.jpg";
+import { UserCard } from "../components/Card/UserCard.jsx";
+import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import Button from "../elements/CustomButton/CustomButton.jsx";
+import avatar from "../assets/img/faces/face-3.jpg";
 import Header from "./Header"
 class UserProfile extends Component {
     constructor() {

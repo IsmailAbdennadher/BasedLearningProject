@@ -4,10 +4,10 @@ import {
     FormGroup, ControlLabel, FormControl
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
-import Checkbox from 'elements/CustomCheckbox/CustomCheckbox.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
+import Checkbox from '../../elements/CustomCheckbox/CustomCheckbox.jsx';
 
 class LoginPage extends Component{
     constructor(props){

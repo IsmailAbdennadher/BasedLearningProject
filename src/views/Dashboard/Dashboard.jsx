@@ -12,9 +12,9 @@ import {
     Geography,
 } from "react-simple-maps";
 
-import Card from 'components/Card/Card.jsx';
-import StatsCard from 'components/Card/StatsCard.jsx';
-import Tasks from 'components/Tasks/Tasks.jsx';
+import Card from '../../components/Card/Card.jsx';
+import StatsCard from '../../components/Card/StatsCard.jsx';
+import Tasks from '../../components/Tasks/Tasks.jsx';
 
 import {
     dataPie,
@@ -25,7 +25,7 @@ import {
     optionsBar,
     responsiveBar,
     table_data
-} from 'variables/Variables.jsx';
+} from '../../variables/Variables.jsx';
 
 const colorScale = scaleLinear()
 .domain([0, 1, 6820])

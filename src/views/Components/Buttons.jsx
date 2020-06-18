@@ -5,7 +5,7 @@ import {
     Grid, Row, Col
 } from 'react-bootstrap';
 
-import Button from 'elements/CustomButton/CustomButton.jsx';
+import Button from '../../elements/CustomButton/CustomButton.jsx';
 
 class Buttons extends Component{
     render(){

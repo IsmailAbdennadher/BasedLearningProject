@@ -5,7 +5,7 @@ import {
     Grid, Row, Col
 } from 'react-bootstrap';
 
-import Card from 'components/Card/Card.jsx';
+import Card from '../../components/Card/Card.jsx';
 
 // DataTables.net plugin - creates a tables with actions on it
 require('datatables.net-responsive');
